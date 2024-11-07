@@ -9,7 +9,7 @@
     --button-color: #0da323;
     --button-clicked-color: #058c42;
     --primary-font: 'DM Mono', monospace;
-    --font-size: 24px;
+    --font-size: 1.25em;
 }
 
 body{
@@ -19,10 +19,10 @@ body{
 }
 
 /* header part */
-.header{
+header{
     display: flex;
     align-content: flex-start;
-    height: 60px;
+    height: 10%;
 }
 
 .logo{
