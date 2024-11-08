@@ -20,9 +20,10 @@ body{
 
 /* header part */
 header{
+
     display: flex;
     align-content: flex-start;
-    height: 10%;
+    min-height: 10%;
 }
 
 .logo{
@@ -32,14 +33,19 @@ header{
 /* main part - input box and key matrix box */
 
 .main-container{
+
+    max-width: 1400px;
+    margin-inline: auto;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
+    gap: 20px;
 }
 
 /* text box and button for encryption decryption */
 .message-container{
-    height: 600px;
-    width: 650px;
+    min-height: 600px;
+    min-width: 650px;
     display: flex;
     flex-direction: column;
     background-color: var(--text-box-background-color);
@@ -130,8 +136,8 @@ input:checked + .slider:before {
 }
 
 .key-matrix-container{
-    height: 600px;
-    width: 650px;
+    min-height: 600px;
+    min-width: 650px;
     display: flex;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
