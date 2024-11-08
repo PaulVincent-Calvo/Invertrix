@@ -9,7 +9,7 @@
     --button-color: #0da323;
     --button-clicked-color: #058c42;
     --primary-font: 'DM Mono', monospace;
-    --font-size: 24px;
+    --font-size: 1.25em;
 }
 
 body{
@@ -19,10 +19,11 @@ body{
 }
 
 /* header part */
-.header{
+header{
+
     display: flex;
     align-content: flex-start;
-    height: 60px;
+    min-height: 10%;
 }
 
 .logo{
@@ -32,14 +33,19 @@ body{
 /* main part - input box and key matrix box */
 
 .main-container{
+
+    max-width: 1400px;
+    margin-inline: auto;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
+    gap: 20px;
 }
 
 /* text box and button for encryption decryption */
 .message-container{
-    height: 600px;
-    width: 650px;
+    min-height: 600px;
+    min-width: 650px;
     display: flex;
     flex-direction: column;
     background-color: var(--text-box-background-color);
@@ -130,8 +136,8 @@ input:checked + .slider:before {
 }
 
 .key-matrix-container{
-    height: 600px;
-    width: 650px;
+    min-height: 600px;
+    min-width: 650px;
     display: flex;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
