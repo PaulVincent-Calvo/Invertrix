@@ -3,14 +3,16 @@ function toggleMode() {
     const actionButton = document.getElementById("encrypt-decrypt-button");
     const textArea = document.getElementById("text-box");
     const gridInputs = document.querySelectorAll('.cell'); // Select all grid input cells
-
+    const generateKeyButton = document.getElementById("generate-key-button");
+    
     if (isEncryptMode) {
         actionButton.textContent = "Encrypt";
         textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press “Encrypt”.";
-
+        generateKeyButton.disabled = false;
     } else {
         actionButton.textContent = "Decrypt";
         textArea.placeholder = "To decrypt text, enter or paste it here. Then select the matrix size of your key matrix, input its values, and press decrypt.";
+        generateKeyButton.disabled = true;
     }
 }
 
