@@ -16,7 +16,7 @@ function toggleMode() {
 
 function updateGrid() {
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    const gridContainer = document.getElementById('key-matrix-grid');
+    const gridContainer = document.getElementById('matrix-container');
     gridContainer.innerHTML = '';
 
     gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 5rem)`; // WIDTH OF CELL: 5rem 
@@ -33,18 +33,10 @@ function updateGrid() {
         const col = i % gridSize;
 
         // Add black borders for the outer cells
-        if (row === 0) {
-            cellInput.classList.add('top-border');
-        }
-        if (row === gridSize - 1) {
-            cellInput.classList.add('bottom-border');
-        }
-        if (col === 0) {
-            cellInput.classList.add('left-border');
-        }
-        if (col === gridSize - 1) {
-            cellInput.classList.add('right-border');
-        }
+        if (row === 0) cellInput.classList.add('top-border');
+        if (row === gridSize - 1) cellInput.classList.add('bottom-border');
+        if (col === 0) cellInput.classList.add('left-border');
+        if (col === gridSize - 1) cellInput.classList.add('right-border');
 
         // Add the event listener for arrow navigation
         cellInput.addEventListener('keydown', (e) => handleArrowNavigation(e, i, gridSize));
