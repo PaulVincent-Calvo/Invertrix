@@ -11,6 +11,7 @@
     --primary-font: 'DM Mono', monospace;
     --message-font-size: 1.25em;
     --matrix-font-size: 2em;
+    --button-width: 150px;
 }
 
 body{
@@ -71,12 +72,12 @@ header{
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .encrypt-decrypt-button {
     height: 40px;
-    width: 130px;
+    width: var(--button-width);
     margin: 10px;
     padding: 5px;
     align-content: center;
@@ -134,7 +135,7 @@ input:checked + .slider:before {
     transform: translateX(40px);
 }
 
-/* Key Matrix */
+/* Key Matrix, clear matrix button, generate random values button*/
 
 .key-matrix-container {
     display: flex;
@@ -146,12 +147,32 @@ input:checked + .slider:before {
     border-radius: 20px;
     border: 2px solid red;
 }
-#space-top, #space-bottom {
-    flex-grow: 1;
+
+.dropdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
+
+#radio-button-grid-size {
+    background-color: var(--matrix-box-background-color);
+    border-color: var(--matrix-box-background-color);
+    color: var(--text-color);
+    font-family: var(--primary-font);
+    font-size: var(--message-font-size);
+    padding: 5px;
+    cursor: pointer;
+}
+.space-top, .space-bottom {
+    flex-grow: 1;
+    border: 1px solid white;
+}
+
 .matrix-container {
-    margin: 10px;        
-    width: 100%; 
+    margin: 10px;
+    max-height: 80%;          
+    min-width: 625px; 
     display: grid;
     justify-content: center;
     align-items: center;
@@ -186,19 +207,32 @@ input:checked + .slider:before {
     border-right: solid var(--matrix-box-background-color);
 }
 
-.dropdown-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+.clear-matrix-button{
+    height: 40px;
+    width: var(--button-width);
+    margin: 10px;
+    padding: 5px;
+    align-content: center;
+    background-color: var(--button-color);    
+    color: var(--button-text-color);
+    font-weight: 600;
+    font-size: var(--message-font-size);    
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
-#radio-button-grid-size {
-    background-color: var(--matrix-box-background-color);
-    border-color: var(--matrix-box-background-color);
-    color: var(--text-color);
-    font-family: var(--primary-font);
-    font-size: var(--message-font-size);
+.generate-key-button{
+    height: 40px;
+    width: var(--button-width);
+    margin: 10px;
     padding: 5px;
+    align-content: center;
+    background-color: var(--button-color);    
+    color: var(--button-text-color);
+    font-weight: 600;
+    font-size: var(--message-font-size);    
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
 }
