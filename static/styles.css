@@ -141,8 +141,8 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 90%;
-    min-width: 625px;
+    min-height: 600px;
+    min-width: 650px;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
 }

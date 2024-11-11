@@ -76,6 +76,28 @@ function handleArrowNavigation(event, currentIndex, gridSize) {
     }
 }
 
+document.getElementById('clear-matrix-button').addEventListener('click', () => {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => cell.value = '');
+});
+
+document.getElementById('generate-key-button').addEventListener('click', async () => {
+    const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+    
+    const response = await fetch('/generate-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ size: gridSize })
+    });
+    
+    const keyMatrix = await response.json();
+    const cells = document.querySelectorAll('.cell');
+    keyMatrix.flat().forEach((value, index) => {
+        cells[index].value = value;
+    });
+});
+
+
 //START 
 
 let defaultGridSize = 2;

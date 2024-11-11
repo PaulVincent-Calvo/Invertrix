@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invertrix</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='assets/invertrix-favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>@
+    <header>
+        <div class="logo"><img src="{{ url_for('static', filename='assets/invertix-logo.png') }}" width="162px" height="32px"></div>
+    </header>
+    <div class="main-container">
+        <div class="message-container">
+            <textarea class="text-box" id="text-box"></textarea>
+            <div class="action-buttons-container">
+                <label class="encrypt-decrypt-toggle-switch">
+                    <input type="checkbox" id="encrypt-decrypt-toggle" onchange="toggleMode()" checked>
+                    <span class="slider"></span>
+                </label>
+                <button class="encrypt-decrypt-button" id="encrypt-decrypt-button">Encrypt</button>
+            </div>
+        </div>
+        <div class="key-matrix-container">
+            <div class="dropdown-container">
+                <select id="radio-button-grid-size" onchange="updateGrid()">
+                    <option value="2" selected>2x2 Matrix</option>
+                    <option value="3">3x3 Matrix</option>
+                    <option value="4">4x4 Matrix</option>
+                    <option value="5">5x5 Matrix</option>
+                </select>
+            </div>
+            <div class="space-top"></div>
+            <div class="matrix-container" id="matrix-container"></div>
+            <div class="space-bottom"></div>
+            <div class="action-buttons-container">
+                <button class="clear-matrix-button" id="clear-matrix-button">Clear Matrix</button>
+                <button class="generate-key-button" id="generate-key-button">Generate Key</button>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
