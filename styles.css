@@ -145,7 +145,6 @@ input:checked + .slider:before {
     min-width: 625px;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
-    border: 2px solid red;
 }
 
 .dropdown-container {
@@ -166,7 +165,6 @@ input:checked + .slider:before {
 }
 .space-top, .space-bottom {
     flex-grow: 1;
-    border: 1px solid white;
 }
 
 .matrix-container {
@@ -176,7 +174,6 @@ input:checked + .slider:before {
     display: grid;
     justify-content: center;
     align-items: center;
-    border: 2px solid white;
     height: auto;
 }
 
