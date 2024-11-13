@@ -1,10 +1,31 @@
+from flask import Flask, render_template, request, jsonify
 import numpy as np
 
-class GeneralMethods:
-    alphabet = np.array(['0','a','b','c','d','e','f','g','h','i','j',
-                    'k','l','m','n','o','p','q','r','s','t',
-                    'u','v','w','x','y','z','_'])  # 0(placeholder) & _(whitespace)
+app = Flask(__name__, template_folder='templates')
 
+alphabet = np.array(['0','a','b','c','d','e','f','g','h','i','j',
+                    'k','l','m','n','o','p','q','r','s','t',
+                    'u','v','w','x','y','z','_']) 
+@app.route('/')
+def index():
+    return render_template('invertrix.html')
+
+
+@app.route('/generate-key', methods=['POST'])
+def generate_key():
+    # Retrieve the matrix size from the client (default is 2)
+    data = request.get_json()
+    size = data.get('size', 2)
+
+    # Create an instance of GeneralMethods and use it to generate an invertible matrix
+    general_methods = GeneralMethods()
+    key_matrix = general_methods.generateInvertibleMatrix(size)
+
+    # Return the generated matrix as a JSON response
+    return jsonify(key_matrix)
+
+
+class GeneralMethods:
     def returnAlphabetIndices(self, message):
         try:
             if not isinstance(message, str):
@@ -52,11 +73,12 @@ class GeneralMethods:
             if min_condition > max_condition:
                 raise ValueError(f"min_condition cannot be greater than max_condition. Got min_condition={min_condition}, max_condition={max_condition}.")
 
+            # Generate a random matrix and check if it's invertible
             while True:
-                matrix = np.random.randint(0, 10000, (size, size))
+                matrix = np.random.randint(0, 999, (size, size))
                 condition_number = np.linalg.cond(matrix)
                 if min_condition <= condition_number <= max_condition:
-                    return matrix
+                    return matrix.tolist()
 
         except ValueError as ve:
             return f"ValueError: {ve}"
@@ -190,24 +212,5 @@ class Decryptor:
         except Exception as e:
             return f"An error occurred while printing decryption details: {e}"
 
-
-def main(message, keyMatrixSize):
-    general_methods = GeneralMethods()
-
-    # tentative, since it's much ideal to generate the key matrix in JavaScript
-    keyMatrix = general_methods.generateInvertibleMatrix(keyMatrixSize)
-
-    messageMatrixSize = general_methods.calculateMessageMatrixSize(message, keyMatrixSize)
-    paddedMessage = general_methods.padMessageToMatrixSize(message, messageMatrixSize)
-    print(f"Original Message: {message}\nPadded Message: {paddedMessage}\n\n")
-
-    # encryption
-    encryptor = Encryptor(keyMatrix, general_methods)
-    encryptedMessage = encryptor.encrypt(paddedMessage, messageMatrixSize)
-
-    # decryption
-    decryptor = Decryptor(keyMatrix, general_methods)
-    decryptedMessage = decryptor.decrypt(encryptedMessage, messageMatrixSize)
-
-
-main('livelovelaufey', 4)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
