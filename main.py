@@ -3,9 +3,8 @@ import numpy as np
 
 app = Flask(__name__, template_folder='templates')
 
-alphabet = np.array(['0','a','b','c','d','e','f','g','h','i','j',
-                    'k','l','m','n','o','p','q','r','s','t',
-                    'u','v','w','x','y','z','_']) 
+random_numbers_limit = 10000
+
 @app.route('/')
 def index():
     return render_template('invertrix.html')
@@ -24,8 +23,76 @@ def generate_key():
     # Return the generated matrix as a JSON response
     return jsonify(key_matrix)
 
+@app.route('/encrypt', methods=['POST'])
+def encrypt_message():
+
+    data = request.get_json()
+    message = data.get('message')
+    keyMatrix = data.get('keyMatrix')
+    
+    keyMatrix = np.array(keyMatrix)
+    
+    # Check if the key matrix is a valid 2D array
+    if keyMatrix.ndim != 2:
+        return jsonify({"error": "Key matrix must be a 2D array"}), 400
+    
+
+    keyMatrixSize = keyMatrix.shape[0]
+    
+    # Initialize GeneralMethods and Encryptor classes
+    general_methods = GeneralMethods()
+    encryptor = Encryptor(keyMatrix, general_methods)
+    
+    # Calculate message matrix size and pad message
+    messageMatrixSize = general_methods.calculateMessageMatrixSize(message, keyMatrixSize)
+    paddedMessage = general_methods.padMessageToMatrixSize(message, messageMatrixSize)
+    
+    # Perform encryption and gather details
+    encryption_details = encryptor.encrypt(paddedMessage, messageMatrixSize)
+    
+    # Return the full set of encryption details
+    return jsonify(encryption_details)  # Return the dictionary directly as JSON
+
+@app.route('/decrypt', methods=['POST'])
+def decrypt_message():
+    try:
+        # Retrieve the encrypted message and key matrix from the client
+        data = request.get_json()
+        
+        encrypted_message = data.get('message')  # Encrypted values separated by spaces or commas
+        
+        keyMatrix = np.array(data.get('keyMatrix'))  # Get the key matrix from client
+        print(keyMatrix)
+        keyMatrixSize = data.get('gridSize')
+        
+        # Check if the key matrix is valid (must be 2D)
+        if keyMatrix.ndim != 2:
+            return jsonify({"error": "Key matrix must be a 2D array"}), 400
+        
+        general_methods = GeneralMethods()
+        # Calculate the message matrix size of the decrypted message
+        messageMatrixSize = general_methods.calculateMessageMatrixSizeOfDecryptedMessage(encrypted_message, keyMatrixSize)
+        
+        decryptor = Decryptor(keyMatrix, general_methods)
+        encrypted_message = encrypted_message.split()  # Convert to list of strings
+        
+        # Convert the message to a list of integers
+        encrypted_message = list(map(int, encrypted_message))
+        
+        decrypted_message = decryptor.decrypt(encrypted_message, messageMatrixSize)
+        print(f"Decrypted message: {decrypted_message}")
+        # Return the decrypted message as a JSON response
+        return jsonify({
+            'decrypted_message': decrypted_message
+        })
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 class GeneralMethods:
+    alphabet = np.array([' ','a','b','c','d','e','f','g','h','i','j',
+                    'k','l','m','n','o','p','q','r','s','t',
+                    'u','v','w','x','y','z','_'])  # 0(placeholder) & _(whitespace)
     def returnAlphabetIndices(self, message):
         try:
             if not isinstance(message, str):
@@ -38,7 +105,7 @@ class GeneralMethods:
                     if 'a' <= char <= 'z':
                         indices.append(ord(char) - ord('a') + 1)
                     elif char in [' ', '_']:
-                        indices.append(27)
+                        indices.append(0)
                     else:
                         indices.append(None)
                 except Exception as inner_error:
@@ -75,7 +142,7 @@ class GeneralMethods:
 
             # Generate a random matrix and check if it's invertible
             while True:
-                matrix = np.random.randint(0, 999, (size, size))
+                matrix = np.random.randint(1, random_numbers_limit, (size, size))
                 condition_number = np.linalg.cond(matrix)
                 if min_condition <= condition_number <= max_condition:
                     return matrix.tolist()
@@ -120,6 +187,42 @@ class GeneralMethods:
 
         except Exception as e:
             return f"An unexpected error occurred: {e}"
+        
+    def calculateMessageMatrixSizeOfDecryptedMessage(self, message, keyMatrixSize):
+        try:
+            if not isinstance(message, str):
+                raise TypeError(f"Expected 'message' to be a string. Got {type(message)}.")
+            
+            if not isinstance(keyMatrixSize, int) or keyMatrixSize <= 0:
+                raise ValueError(f"Expected 'keyMatrixSize' to be a positive integer. Got {keyMatrixSize}.")
+            
+            # Count the number of numbers (split by spaces or commas)
+            messageNumbers = [num for num in message.replace(",", " ").split() if num.isdigit()]
+            messageLength = len(messageNumbers)
+            
+            # Calculate the number of rows for the matrix
+            numRows = messageLength // keyMatrixSize
+            
+            # If there's a remainder, we need an additional row
+            if messageLength % keyMatrixSize == 0:
+                messageMatrixSize = [numRows, keyMatrixSize]
+            else:
+                messageMatrixSize = [numRows + 1, keyMatrixSize]
+
+            print(f"Message Length of Decypt (counted numbers): {messageLength}")
+            print(f"Message Matrix Size of Decrypt (m x n): {messageMatrixSize}")
+
+            return messageMatrixSize
+
+        except TypeError as te:
+            return f"TypeError: {te}"
+
+        except ValueError as ve:
+            return f"ValueError: {ve}"
+
+        except Exception as e:
+            return f"An unexpected error occurred: {e}"
+
 
     def padMessageToMatrixSize(self, message, messageMatrixSize):
         try:
@@ -156,12 +259,23 @@ class Encryptor:
     def encrypt(self, message, messageMatrixSize):
         try:
             messageIndices = self.general_methods.returnAlphabetIndices(message)
-            reshapedMessageIndices = self.general_methods.reshapeAnArray(messageIndices, messageMatrixSize).T
-            productMatrix = np.matmul(self.keyMatrix, reshapedMessageIndices)
-            encryptedValues = np.reshape(productMatrix, -1, order='F')
+            reshapedMessageIndices = self.general_methods.reshapeAnArray(messageIndices, messageMatrixSize)
+            print(f"reshapedMessageIndices: {reshapedMessageIndices}")
+            productMatrix = np.matmul(reshapedMessageIndices, self.keyMatrix)
+            encryptedValues = np.reshape(productMatrix, -1, order='C')
+
+            # Return all the encryption details
+            encryption_details = {
+                'message': message,
+                'indices': messageIndices.tolist(),  # Convert numpy array to list
+                'reshaped_indices': reshapedMessageIndices.tolist(),
+                'key_matrix': self.keyMatrix.tolist(),
+                'product_matrix': productMatrix.tolist(),
+                'encrypted_values': encryptedValues.tolist()
+            }
 
             self.printEncryptionDetails(message, messageIndices, reshapedMessageIndices, self.keyMatrix, productMatrix, encryptedValues)
-            return encryptedValues
+            return encryption_details  # Return all the encryption details
 
         except ValueError as e:
             return f"Error: {e}"
@@ -182,19 +296,21 @@ class Encryptor:
 class Decryptor:
     def __init__(self, keyMatrix, general_methods):
         self.keyMatrix = keyMatrix
+        print(f"decrypt keymatrix: {keyMatrix}")
         self.general_methods = general_methods
 
     def decrypt(self, values, messageMatrixSize):
         try:
             valuesArray = np.array(values)
-            reshapedValuesArray = self.general_methods.reshapeAnArray(valuesArray, messageMatrixSize).T
-
+            reshapedValuesArray = self.general_methods.reshapeAnArray(valuesArray, messageMatrixSize)
             inverseKeyMatrix = np.linalg.inv(self.keyMatrix)
-            productMatrix = np.matmul(inverseKeyMatrix, reshapedValuesArray)
+            productMatrix = np.matmul(reshapedValuesArray,inverseKeyMatrix)
 
-            reshapedProductMatrix = np.rint(np.reshape(productMatrix, -1, order='F')).astype(int)
+            reshapedProductMatrix = np.rint(np.reshape(productMatrix, -1, order='A')).astype(int)
             decryptedMessage = self.general_methods.alphabet[reshapedProductMatrix]
+            print(f"decryptedMessage: {decryptedMessage}")
             decryptedMessage = ''.join(decryptedMessage)
+            
             
             self.printDecryptionDetails(reshapedValuesArray, inverseKeyMatrix, reshapedProductMatrix, decryptedMessage)
             return decryptedMessage
