@@ -1,5 +1,6 @@
 let mode = 'mode1'; // Start with mode1 as default
 let currentStepIndex = 0; // Track the current step index
+let keyMatrix = null;
 
 // Step names for each mode
 const mode1Steps = [
@@ -41,6 +42,33 @@ function toggleMode() {
     scrollToCurrentStep();
 }
 
+function updateKeyMatrix() {
+    const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+    keyMatrix = [];
+    
+    // Loop through each grid cell and store the values in the keyMatrix
+    const cells = document.querySelectorAll('.cell');
+    let rowIndex = -1;
+
+    cells.forEach((cell, index) => {
+        if (index % gridSize === 0) rowIndex++;
+        if (!keyMatrix[rowIndex]) keyMatrix[rowIndex] = [];
+        keyMatrix[rowIndex].push(parseFloat(cell.value) || 0); // Use 0 if input is empty or invalid
+    });
+}
+
+// Add event listeners to each grid cell to update the keyMatrix on change
+function addCellEventListeners() {
+    const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+    const cells = document.querySelectorAll('.cell');
+    
+    cells.forEach(cell => {
+        cell.addEventListener('input', () => {
+            updateKeyMatrix(); // Update keyMatrix whenever a cell value is changed
+        });
+    });
+}
+
 function updateGrid() {
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
     const gridContainer = document.getElementById('matrix-container');
@@ -70,7 +98,7 @@ function updateGrid() {
 
         gridContainer.appendChild(cellInput);
     }
-
+    addCellEventListeners(); 
     // Call toggleMode after the grid is generated to set correct interaction mode
     toggleMode();
 }
@@ -105,7 +133,7 @@ function handleArrowNavigation(event, currentIndex, gridSize) {
 
 document.getElementById('clear-matrix-button').addEventListener('click', () => {
     const cells = document.querySelectorAll('.cell');
-    cells.forEach(cell => cell.value = '0');
+    cells.forEach(cell => cell.value = '');
 });
 
 document.getElementById('generate-key-button').addEventListener('click', async () => {
@@ -117,7 +145,7 @@ document.getElementById('generate-key-button').addEventListener('click', async (
         body: JSON.stringify({ size: gridSize })
     });
     
-    const keyMatrix = await response.json();
+    keyMatrix = await response.json();
     const cells = document.querySelectorAll('.cell');
     keyMatrix.flat().forEach((value, index) => {
         cells[index].value = value;
@@ -200,6 +228,71 @@ function updateStepsDisplay() {
         `;
     }
 }
+
+async function encrypt(text, gridSize) {
+    console.log("Encrypting text:", text);
+    console.log("Encryption done");
+    fetch('/encrypt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error(data.error);
+        } else {
+            console.log("Encryption Details:", data);
+            // Access individual properties as needed
+            console.log("Message:", data.message);  // "message" instead of "Message"
+            console.log("Indices:", data.indices);  // "indices" instead of "Indices"
+            console.log("Reshaped Indices:", data.reshaped_indices);  // "reshaped_indices" instead of "ReshapedIndices"
+            console.log("Key Matrix:", data.key_matrix);  // "key_matrix" instead of "KeyMatrix"
+            console.log("Product Matrix:", data.product_matrix);  // "product_matrix" instead of "ProductMatrix"
+            console.log("Encrypted Values:", data.encrypted_values);  
+
+            // dine na maglalagay ng functions for showing the results
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+async function decrypt(text, gridSize) {
+    console.log("Decrypting text:", text);
+    
+    const response = await fetch('/decrypt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error(data.error);
+        } else {
+            console.log("Decryption result:", data.decrypted_message);
+
+            // dine na maglalagay ng functions for showing the results for decrypt bukas n uli
+            //const decryptedMessageContainer = document.getElementById('decrypted-message'); SAMPLE
+            //decryptedMessageContainer.textContent = data.decrypted_message;
+
+            
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Toggle button function to call Encrypt or Decrypt based on mode
+document.getElementById('encrypt-decrypt-button').addEventListener('click', async () => {
+    const text = document.getElementById('text-box').value;
+    const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+
+    if (mode === 'mode1') { // Encrypt mode
+        await encrypt(text, gridSize);
+    } else if (mode === 'mode2') { // Decrypt mode
+        await decrypt(text, gridSize);
+    }
+});
 
 //START 
 
