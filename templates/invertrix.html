@@ -1,72 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
         <title>Invertrix</title>
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='assets/invertrix-favicon.png') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel = "icon" type = "image/png" sizes = "32x32" href = "{{ url_for('static', filename='assets/invertrix-favicon.png') }}">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>
         <header>
-            <div class="logo"><img src="{{ url_for('static', filename='assets/invertix-logo.png') }}" alt="Invertrix Logo" width="162px" height="32px"></div>
+            <div class = "logo"><img src = "{{ url_for('static', filename='assets/invertix-logo.png') }}" alt = "Invertrix Logo" width = "162px" height = "32px"></div>
         </header>
-        <div class="container">
-            <div class="main-container">
-                <div class="message-container">
-                    <textarea class="text-box" id="text-box"></textarea>
-                    <div class="action-buttons-container">
-                        <label class="encrypt-decrypt-toggle-switch">
-                            <input type="checkbox" id="encrypt-decrypt-toggle" onchange="toggleMode()" checked>
-                            <span class="slider"></span>
+        <div class = "container">
+            <div class = "main-container">
+                <div class = "message-container">
+                    <textarea class = "text-box" id = "text-box"></textarea>
+                    <div class = "action-buttons-container">
+                        <label class = "encrypt-decrypt-toggle-switch">
+                            <input type = "checkbox" id = "encrypt-decrypt-toggle" onchange = "toggleMode()" checked>
+                            <span class = "slider"></span>
                         </label>
-                        <button class="encrypt-decrypt-button" id="encrypt-decrypt-button">Encrypt</button>
+                        <button class = "encrypt-decrypt-button" id = "encrypt-decrypt-button">Encrypt</button>
                     </div>
                 </div>
-                <div class="key-matrix-container">  
-                    <div class="dropdown-container">
-                        <select id="radio-button-grid-size" onchange="updateGrid()">
-                            <option value="2" selected>2x2 Matrix</option>
-                            <option value="3">3x3 Matrix</option>
-                            <option value="4">4x4 Matrix</option>
-                            <option value="5">5x5 Matrix</option>
+                <div class = "key-matrix-container">  
+                    <div class = "dropdown-container">
+                        <select id = "radio-button-grid-size" onchange = "updateGrid()">
+                            <option value = "2" selected>2x2 Matrix</option>
+                            <option value = "3">3x3 Matrix</option>
+                            <option value = "4">4x4 Matrix</option>
+                            <option value = "5">5x5 Matrix</option>
                         </select>
                     </div>
-                    <div class="space-top"></div>
-                    <div class="matrix-container" id="matrix-container"></div>
-                    <div class="space-bottom"></div>
-                    <div class="action-buttons-container">
-                        <button class="clear-matrix-button" id="clear-matrix-button">Clear Matrix</button>
-                        <button class="generate-key-button" id="generate-key-button">Generate Key</button>
+                    <div class = "space-top"></div>
+                    <div class = "matrix-container" id = "matrix-container"></div>
+                    <div class = "space-bottom"></div>
+                    <div class = "action-buttons-container">
+                        <button class = "clear-matrix-button" id = "clear-matrix-button">Clear Matrix</button>
+                        <button class = "generate-key-button" id = "generate-key-button">Generate Key</button>
                     </div>
                 </div>
             </div>
-            <div class="results-container">
-                <div class="results-header" id="class-header">
-                    <button class="previous-button" id="previous-button"><img src="{{ url_for('static', filename='assets/left-arrow.png') }}" width="32px"></button>
-                    <p class="results-header-steps" id="results-header-steps">Placeholder</p>
-                    <button class="next-button" id="next-button"><img src="{{ url_for('static', filename='assets/right-arrow.png') }}"  width="32px"></button>
+            <div class = "results-container">
+                <div class = "results-header" id = "class-header">
+                    <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px"></button>
+                    <p class = "results-header-steps" id="results-header-steps">Placeholder</p>
+                    <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px"></button>
                 </div>
-                <div class = "results-steps">
-                    <div class = "steps-scroller">
-                        <div class = "step">
-                            <div class = "step-1-container-1 type-a"></div>
-                            <div class = "step-1-container-2 type-b"></div>
-                        </div>
-                        <div class = "step">
-                            <div class = "step-2-container-1 type-b"></div>
-                            <div class = "step-2-container-2 type-b"></div>
-                        </div>
-                        <div class = "step">
-                            <div class = "step-3-container-1 type-b"></div>
-                            <div class = "step-3-container-2 type-a"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="results">
+                <div class = "results-steps"></div>
             </div>            
         </div>
 
-        <script src="{{ url_for('static', filename='index.js') }}"></script>
+        <script src = "{{ url_for('static', filename='index.js') }}"></script>
     </body>
 </html>

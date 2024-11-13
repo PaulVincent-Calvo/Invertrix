@@ -246,14 +246,11 @@ input:checked + .slider:before {
 }
 
 /*second part - results of encryption/decryption*/  
-.results-container{
-    width: 100%;
-    margin-inline: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 20px;
+.results-container {
+    overflow: hidden;
+    position: relative;
 }
+
 
 /*header*/
 .results-header{
@@ -278,26 +275,28 @@ input:checked + .slider:before {
     font-family: var(--primary-font);
     font-size: var(--message-font-size);
     color: var(--text-color);  
-    justify-content: center;
+    justify-content: center;     
 }
 
 /*steps*/
-.steps-scroller{
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 100%;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;    
-    scroll-snap-type: inline mandatory;
-    scroll-snap-align: start;
+
+.results-steps {
+    display: flex;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 1400px;
 }
 
 .step{
-    width: 100%;
     display: flex;
+    margin-top: 10px;
+    max-width: 1400px;
     flex-wrap: wrap;
     justify-content: space-around;
-    gap: 20px;
+    min-width: 100%; /* Each step takes up full width of the container */  
+    align-items: center;
+    gap: 10px;
 }
 
 .type-a{

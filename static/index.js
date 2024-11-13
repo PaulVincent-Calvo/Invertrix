@@ -1,3 +1,21 @@
+let mode = 'mode1'; // Start with mode1 as default
+let currentStepIndex = 0; // Track the current step index
+
+// Step names for each mode
+const mode1Steps = [
+    'Convert Message into a Matrix',
+    'Multiply Key Matrix to the Converted Matrix',
+    'Result'
+];
+const mode2Steps = [
+    'Convert Message into a Matrix',
+    'Get the Inverse of the Key Matrix',
+    'Multiply Key Matrix Inverse to the Converted Matrix',
+    'Result'
+];
+
+const resultsStepsContainer = document.querySelector('.results-steps');
+
 function toggleMode() {
     const isEncryptMode = document.getElementById("encrypt-decrypt-toggle").checked;
     const actionButton = document.getElementById("encrypt-decrypt-button");
@@ -9,11 +27,18 @@ function toggleMode() {
         actionButton.textContent = "Encrypt";
         textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press “Encrypt”.";
         generateKeyButton.disabled = false;
+        mode = 'mode1';
     } else {
         actionButton.textContent = "Decrypt";
         textArea.placeholder = "To decrypt text, enter or paste it here. Then select the matrix size of your key matrix, input its values, and press decrypt.";
         generateKeyButton.disabled = true;
+        mode = 'mode2';
     }
+
+    currentStepIndex = 0;
+    updateStepsHeader();
+    updateStepsDisplay();
+    scrollToCurrentStep();
 }
 
 function updateGrid() {
@@ -80,7 +105,7 @@ function handleArrowNavigation(event, currentIndex, gridSize) {
 
 document.getElementById('clear-matrix-button').addEventListener('click', () => {
     const cells = document.querySelectorAll('.cell');
-    cells.forEach(cell => cell.value = '');
+    cells.forEach(cell => cell.value = '0');
 });
 
 document.getElementById('generate-key-button').addEventListener('click', async () => {
@@ -99,12 +124,94 @@ document.getElementById('generate-key-button').addEventListener('click', async (
     });
 });
 
+// Previous step navigation
+function previousStep() {
+    if (currentStepIndex > 0) {
+        currentStepIndex--;
+        updateStepsHeader();
+        scrollToCurrentStep();
+    }
+}
+
+// Next step navigation
+function nextStep() {
+    const steps = mode === 'mode1' ? mode1Steps : mode2Steps;
+    if (currentStepIndex < steps.length - 1) {
+        currentStepIndex++;
+        updateStepsHeader();
+        scrollToCurrentStep();
+    }
+}
+
+// Update step header text
+function updateStepsHeader() {
+    const stepsHeader = document.getElementById('results-header-steps');
+    const steps = mode === 'mode1' ? mode1Steps : mode2Steps;
+    stepsHeader.textContent = steps[currentStepIndex];
+}
+
+// Scrolls the results container to the current step
+function scrollToCurrentStep() {
+    const stepWidth = resultsStepsContainer.clientWidth;
+    resultsStepsContainer.scrollTo({
+        left: stepWidth * currentStepIndex,
+        behavior: 'smooth'
+    });
+}
+
+// Updates the displayed steps for each mode
+function updateStepsDisplay() {
+    const stepsContainer = document.querySelector('.results-steps');
+    stepsContainer.innerHTML = ''; // Clear existing content
+
+    if (mode === 'mode1') {
+        stepsContainer.innerHTML = `
+            <div class="step">
+                <div class="step-1-container-1 type-a" id="step-1-container-1"></div>
+                <div class="step-1-container-2 type-b" id="step-1-container-2"></div>
+            </div>
+            <div class="step">
+                <div class="step-2-container-1 type-b" id="step-2-container-1"></div>
+                <div class="step-2-container-2 type-b" id="step-2-container-2"></div>
+            </div>
+            <div class="step">
+                <div class="step-3-container-1 type-b" id="step-3-container-1"></div>
+                <div class="step-3-container-2 type-a" id="step-3-container-2"></div>
+            </div>
+        `;
+    } else if (mode === 'mode2') {
+        stepsContainer.innerHTML = `
+            <div class="step">
+                <div class = "step-1-container-1 type-a" id = "step-1-container-1"></div>
+                <div class = "step-1-container-2 type-b" id = "step-1-container-2"></div>
+            </div>
+            <div class="step">
+                <div class = "step-2-container-1 type-b" id = "step-2-container-1"></div>
+                <div class = "step-2-container-2 type-b" id = "step-2-container-2"></div>
+            </div>
+            <div class="step">
+                <div class = "step-3-container-1 type-b" id = "step-3-container-1"></div>
+                <div class = "step-3-container-2 type-b" id = "step-3-container-2"></div>
+            </div>
+            <div class="step">
+                <div class = "step-4-container-1 type-b" id = "step-4-container-1"></div>
+                <div class = "step-4-container-2 type-a" id = "step-4-container-2"></div>
+            </div>
+        `;
+    }
+}
 
 //START 
 
 let defaultGridSize = 2;
 
 window.onload = () => {
-    updateGrid(defaultGridSize); 
+    updateGrid();
     toggleMode();
+    updateStepsHeader();
+    updateStepsDisplay();
+    scrollToCurrentStep();
 };
+
+document.getElementById('previous-button').addEventListener('click', previousStep);
+document.getElementById('next-button').addEventListener('click', nextStep);
