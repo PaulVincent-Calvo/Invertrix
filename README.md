@@ -69,15 +69,6 @@ The Flask app will be served locally, and you should see it running in your brow
 <!-- 6. You can also access the webapp online at [https://invertrix.onrender.com/](https://invertrix.onrender.com/)  
    * *Note: There may be a delay on startup due to the testing phase and free hosting.* -->
 
-
-## 🔧 Built With
-
-* Frontend: HTML, CSS, JavaScript
-* Backend Logic:  Python
-* Python Libraries: Numpy
-* API: Flask
-
-
 ## 👥 Contributors
 
 * [Vivs](https://github.com/VivieneGarcia) - Project Manager/Fullstack Developer 🐻
@@ -86,8 +77,16 @@ The Flask app will be served locally, and you should see it running in your brow
 
 
 ## 🌷 Acknowledgments
-* [Ma'am Fatima](https://github.com/marieemoiselle) - Web Systems Prof 
+* [Ma'am Fatima](https://github.com/marieemoiselle) - Web Systems Prof
 
+## 📸 Screenshots 
+<!-- Hindi need. Gusto ko lng may ganto para may mabalikan ako sa future. wow future hehehe 🤓 -->
+
+## 🔧 Built With
+
+* Frontend: HTML, CSS, JavaScript
+* Backend Logic:  Python + Numpy Library
+* API: Flask
 ---
 <p align="center"><img src="https://github.com/PaulVincent-Calvo/Invertrix/blob/main/static/assets/invertix-logo.png" alt="Invertrix Logo"></p>
 
