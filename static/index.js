@@ -201,9 +201,9 @@ function updateStepsDisplay() {
                 <div class="step-1-container-1 type-a" id="step-1-container-1"></div>
                 <div class="step-1-container-2 type-b" id="step-1-container-2">
                 
-                <div class = "space-top"></div>
-                <div id= "indices-grid-container"></div>
-                <div class = "space-bottom"></div>
+                    <div class = "space-top"></div>
+                    <div id= "indices-grid-container"></div>
+                    <div class = "space-bottom"></div>
 
                 </div>
             </div>
@@ -231,16 +231,16 @@ function updateStepsDisplay() {
                     <div class = "space-bottom"></div>
                     
                 </div>
+                
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
                     <div class = "space-top"></div>
-                    <textarea id="encrypted-message-container" class="output-textarea" readonly>Answer will appear here</textarea></div>
+                    <textarea id="output-textarea" readonly>Answer will appear here</textarea></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
         `;
     } else if (mode === 'mode2') {
         stepsContainer.innerHTML = `
-        <div class = "steps-container>
             <div class="step">
                 <div class = "step-1-container-1 type-a" id = "step-1-container-1">
                     <div class = "space-top"></div>
@@ -291,7 +291,6 @@ function updateStepsDisplay() {
                     <div class = "space-bottom"></div>
                 </div>
             </div>
-        </div>
         `;
     }
 }
@@ -330,7 +329,7 @@ async function encrypt(text, gridSize) {
 }
 
 function displayResult(encryptedValues) {
-    const resultArea = document.getElementById('encrypted-message-container'); 
+    const resultArea = document.getElementById('output-textarea'); 
     resultArea.textContent = encryptedValues.join(' '); 
 }
 

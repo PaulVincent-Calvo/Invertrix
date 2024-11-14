@@ -296,17 +296,17 @@ input:checked + .slider:before {
 }
 
 .type-a{
+    display: flex;
     min-height: 600px;
     min-width: 650px;
-    display: flex;
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
     flex-wrap:wrap;
     align-items: center;
     justify-content: center;
-    max-width: 600px; /*ADDED MAX FOR WRAP */
-    max-height: 650px;
+    max-width: 650px; /*ADDED MAX FOR WRAP */
+    max-height: 600px;
 }
 
 .type-b{
@@ -320,8 +320,8 @@ input:checked + .slider:before {
     flex-wrap:wrap;
     align-items: center;
     justify-content: center;
-    max-width: 600px;
-    max-height: 650px; /*ADDED MAX FOR WRAP */
+    max-width: 650px;
+    max-height: 600px; /*ADDED MAX FOR WRAP */
 }
 
 .message-and-index, p{
