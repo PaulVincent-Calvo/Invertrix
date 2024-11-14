@@ -99,6 +99,7 @@ function updateGrid() {
         gridContainer.appendChild(cellInput);
     }
     addCellEventListeners(); 
+    callGenerateKeyMatrix();
     // Call toggleMode after the grid is generated to set correct interaction mode
     toggleMode();
 }
@@ -137,8 +138,11 @@ document.getElementById('clear-matrix-button').addEventListener('click', () => {
 });
 
 document.getElementById('generate-key-button').addEventListener('click', async () => {
+    callGenerateKeyMatrix();
+});
+
+async function callGenerateKeyMatrix(){
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    
     const response = await fetch('/generate-key', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -150,8 +154,7 @@ document.getElementById('generate-key-button').addEventListener('click', async (
     keyMatrix.flat().forEach((value, index) => {
         cells[index].value = value;
     });
-});
-
+}
 // Previous step navigation
 function previousStep() {
     if (currentStepIndex > 0) {
@@ -196,35 +199,99 @@ function updateStepsDisplay() {
         stepsContainer.innerHTML = `
             <div class="step">
                 <div class="step-1-container-1 type-a" id="step-1-container-1"></div>
-                <div class="step-1-container-2 type-b" id="step-1-container-2"></div>
+                <div class="step-1-container-2 type-b" id="step-1-container-2">
+                
+                <div class = "space-top"></div>
+                <div id= "indices-grid-container"></div>
+                <div class = "space-bottom"></div>
+
+                </div>
             </div>
             <div class="step">
-                <div class="step-2-container-1 type-b" id="step-2-container-1"></div>
-                <div class="step-2-container-2 type-b" id="step-2-container-2"></div>
+                <div class="step-2-container-1 type-b" id="step-2-container-1">
+
+                    <div class = "space-top"></div>
+                    <div id= "copy-key-matrix-container"></div>
+                    <div class = "space-bottom"></div>
+
+                </div>
+                <div class="step-2-container-2 type-b" id="step-2-container-2">
+
+                    <div class = "space-top"></div>
+                    <div id = "copy-grid-container"></div>
+                    <div class = "space-bottom"></div>
+
+                </div>
             </div>
             <div class="step">
-                <div class="step-3-container-1 type-b" id="step-3-container-1"></div>
-                <div class="step-3-container-2 type-a" id="step-3-container-2"></div>
+                <div class="step-3-container-1 type-b" id="step-3-container-1">
+
+                    <div class = "space-top"></div>
+                    <div id= "product-matrix-container"></div>
+                    <div class = "space-bottom"></div>
+                    
+                </div>
+                <div class="step-3-container-2 type-a" id="step-3-container-2">
+                    <div class = "space-top"></div>
+                    <textarea id="encrypted-message-container" class="output-textarea" readonly>Answer will appear here</textarea></div>
+                    <div class = "space-bottom"></div>
+                </div>
             </div>
         `;
     } else if (mode === 'mode2') {
         stepsContainer.innerHTML = `
+        <div class = "steps-container>
             <div class="step">
-                <div class = "step-1-container-1 type-a" id = "step-1-container-1"></div>
-                <div class = "step-1-container-2 type-b" id = "step-1-container-2"></div>
+                <div class = "step-1-container-1 type-a" id = "step-1-container-1">
+                    <div class = "space-top"></div>
+                    <p id= "encrypted-message-container"></p>
+                    <div class = "space-bottom"></div>
+                </div>
+                <div class = "step-1-container-2 type-b" id = "step-1-container-2">
+                    <div class = "space-top"></div>
+                    <div id= "input-to-grid-matrix-container"></div>
+                    <div class = "space-bottom"></div>
+                </div>
             </div>
             <div class="step">
-                <div class = "step-2-container-1 type-b" id = "step-2-container-1"></div>
-                <div class = "step-2-container-2 type-b" id = "step-2-container-2"></div>
+                <div class = "step-2-container-1 type-b" id = "step-2-container-1">
+                    <div class = "space-top"></div>
+                    <div id= "copy-key-matrix-container-decrypt"></div>
+                    <div class = "space-bottom"></div>
+                </div>
+
+                <div class = "step-2-container-2 type-b" id = "step-2-container-2">
+                    <div class = "space-top"></div>
+                    <div id= "inverse-key-matrix-container"></div>
+                    <div class = "space-bottom"></div>
+                </div>
             </div>
             <div class="step">
-                <div class = "step-3-container-1 type-b" id = "step-3-container-1"></div>
-                <div class = "step-3-container-2 type-b" id = "step-3-container-2"></div>
+                <div class = "step-3-container-1 type-b" id = "step-3-container-1">
+                    <div class = "space-top"></div>
+                    <div id= "inverse-key-matrix-container-2"></div>
+                    <div class = "space-bottom"></div>
+                </div>
+                <div class = "step-3-container-2 type-b" id = "step-3-container-2">
+                    <div class = "space-top"></div>
+                    <div id= "input-to-grid-matrix-container-2"></div>
+                    <div class = "space-bottom"></div>
+                </div>
             </div>
             <div class="step">
-                <div class = "step-4-container-1 type-b" id = "step-4-container-1"></div>
-                <div class = "step-4-container-2 type-a" id = "step-4-container-2"></div>
+                <div class = "step-4-container-1 type-b" id = "step-4-container-1">
+                    <div class = "space-top"></div>
+                    <div id= "product-matrix-container-decrypt"></div>
+                    <div class = "space-bottom"></div>
+                </div>
+
+                <div class = "step-4-container-2 type-a" id = "step-4-container-2">
+                    <div class = "space-top"></div>
+                    <p id= "decrypted-message-container"></p>
+                    <div class = "space-bottom"></div>
+                </div>
             </div>
+        </div>
         `;
     }
 }
@@ -244,17 +311,101 @@ async function encrypt(text, gridSize) {
         } else {
             console.log("Encryption Details:", data);
             // Access individual properties as needed
-            console.log("Message:", data.message);  // "message" instead of "Message"
-            console.log("Indices:", data.indices);  // "indices" instead of "Indices"
-            console.log("Reshaped Indices:", data.reshaped_indices);  // "reshaped_indices" instead of "ReshapedIndices"
-            console.log("Key Matrix:", data.key_matrix);  // "key_matrix" instead of "KeyMatrix"
-            console.log("Product Matrix:", data.product_matrix);  // "product_matrix" instead of "ProductMatrix"
+            console.log("Message:", data.message); // User input
+            console.log("Indices:", data.indices); // User Input to Numbers
+            console.log("Reshaped Indices:", data.reshaped_indices); 
+            console.log("Key Matrix:", data.key_matrix); 
+            console.log("Product Matrix:", data.product_matrix);  
             console.log("Encrypted Values:", data.encrypted_values);  
 
-            // dine na maglalagay ng functions for showing the results
+            displayMessageAndIndices(data.message,data.indices,gridSize);
+            displayMatrix(data.reshaped_indices,'indices-grid-container');
+            displayMatrix(data.reshaped_indices,'copy-grid-container');
+            displayMatrix(data.key_matrix, 'copy-key-matrix-container');
+            displayMatrix(data.product_matrix, 'product-matrix-container');
+            displayResult(data.encrypted_values);
         }
     })
     .catch(error => console.error('Error:', error));
+}
+
+function displayResult(encryptedValues) {
+    const resultArea = document.getElementById('encrypted-message-container'); 
+    resultArea.textContent = encryptedValues.join(' '); 
+}
+
+function displayMatrix(Matrix, container) {
+    const gridContainer = document.getElementById(container);
+    gridContainer.innerHTML = ''; 
+
+    const numRows = Matrix.length;
+    const numCols = Matrix[0].length;
+
+    // Adjust default cell size and font size based on matrix dimensions
+    let minCellWidth, minCellHeight, fontSize;
+    if (numCols > 9 || numRows > 9) {
+        minCellWidth = 'auto';
+        minCellHeight = 'auto';
+        fontSize = 'auto';  // Smaller font for larger matrices
+    } else if (numCols > 5 || numRows > 5) {
+        minCellWidth = '4rem';
+        minCellHeight = '4rem';
+        fontSize = '1rem';  // Medium font size
+    } else {
+        minCellWidth = '5rem';
+        minCellHeight = '5rem';
+        fontSize = '20px';  // Larger font for smaller matrices
+    }
+
+    gridContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(${minCellWidth}, 1fr))`; 
+
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.id = `cell-${row}-${col}`;
+            cell.textContent = Matrix[row][col];
+
+            cell.style.textAlign = 'center';
+            cell.style.display = 'flex';
+            cell.style.justifyContent = 'center';
+            cell.style.alignItems = 'center';
+            cell.style.height = minCellHeight;
+            cell.style.fontSize = fontSize;
+
+            if (cell.textContent.length > 8) {
+                cell.style.minWidth = 'auto';  
+                cell.style.minHeight = 'auto';  
+                cell.style.fontSize = '1rem';
+                
+            }
+
+            // Add borders for the outer cells
+            if (row === 0) cell.classList.add('top-border');
+            if (row === numRows - 1) cell.classList.add('bottom-border');
+            if (col === 0) cell.classList.add('left-border');
+            if (col === numCols - 1) cell.classList.add('right-border');
+
+            gridContainer.appendChild(cell);
+        }
+    }
+}
+
+
+function displayMessageAndIndices(message, indices, gridSize) {
+    const container = document.getElementById('step-1-container-1');
+    container.innerHTML = ''; 
+
+    for (let i = 0; i < indices.length; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'message-and-index';
+        cell.textContent = `${message[i]} ${indices[i]}`; 
+        container.appendChild(cell);
+
+        if ((i + 1) % gridSize === 0) {
+            container.appendChild(document.createElement('br'));
+        }
+    }
 }
 
 async function decrypt(text, gridSize) {
@@ -267,19 +418,40 @@ async function decrypt(text, gridSize) {
     })
     .then(response => response.json())
     .then(data => {
+        
+
         if (data.error) {
             console.error(data.error);
         } else {
-            console.log("Decryption result:", data.decrypted_message);
-
-            // dine na maglalagay ng functions for showing the results for decrypt bukas n uli
-            //const decryptedMessageContainer = document.getElementById('decrypted-message'); SAMPLE
-            //decryptedMessageContainer.textContent = data.decrypted_message;
-
+            console.log("Decryption Details:", data);
+            console.log("Key Matrix: ", data.key_matrix);
+            console.log("User Input for decrypt: ", data.reshaped_values_array);
+            console.log("Inverse of Key Matrix: ", data.inverse_key_matrix);
+            console.log("Rounded Inverse Matrix: ", data.rounded_inverse_key_matrix)
+            console.log("Result in Number Form: ", data.reshaped_product_matrix);
+            console.log("Decrypted Message: ", data.decrypted_message)
             
+            displayMessage(text, 'encrypted-message-container');
+            displayMatrix(data.reshaped_values_array, 'input-to-grid-matrix-container');
+
+            displayMatrix(data.key_matrix, 'copy-key-matrix-container-decrypt');
+            displayMatrix(data.rounded_inverse_key_matrix, 'inverse-key-matrix-container');
+
+            displayMatrix(data.rounded_inverse_key_matrix, 'inverse-key-matrix-container-2');
+            displayMatrix(data.reshaped_values_array, 'input-to-grid-matrix-container-2');
+
+            displayMatrix(data.reshaped_product_matrix, 'product-matrix-container-decrypt');
+            displayMessage(data.decrypted_message, 'decrypted-message-container'); 
+
         }
     })
     .catch(error => console.error('Error:', error));
+}
+
+function displayMessage(text, container) {
+    messageContainer = document.getElementById(container);
+    messageContainer.textContent = text;
+    console.log("done");
 }
 
 // Toggle button function to call Encrypt or Decrypt based on mode
@@ -300,6 +472,7 @@ let defaultGridSize = 2;
 
 window.onload = () => {
     updateGrid();
+    callGenerateKeyMatrix();
     toggleMode();
     updateStepsHeader();
     updateStepsDisplay();

@@ -183,8 +183,20 @@ input:checked + .slider:before {
     height: auto;
 }
 
+#copy-key-matrix-container, #product-matrix-container, #input-to-grid-matrix-container, 
+#copy-key-matrix-container-decrypt,#inverse-key-matrix-container,#input-to-grid-matrix-container-2, 
+#product-matrix-container-decrypt, #inverse-key-matrix-container-2, #indices-grid-container, #copy-grid-container{
+    margin: 10px;
+    max-height: 80%;          
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+
 .cell {
-    font-size: var(--matrix-font-size);
+    font-size: 20px; /* DITO NAIBA FONT SIZE */
     font-family: var(--primary-font);
     font-weight: 300;
     text-align: center;
@@ -192,22 +204,6 @@ input:checked + .slider:before {
     background-color: transparent;
     color: var(--button-color);
     border: 2px solid var(--button-color);
-}
-
-.top-border {
-    border-top: solid var(--matrix-box-background-color);
-}
-
-.bottom-border {
-    border-bottom: solid var(--matrix-box-background-color);
-}
-
-.left-border {
-    border-left: solid var(--matrix-box-background-color);
-}
-
-.right-border {
-    border-right: solid var(--matrix-box-background-color);
 }
 
 .clear-matrix-button{
@@ -306,6 +302,11 @@ input:checked + .slider:before {
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
+    flex-wrap:wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px; /*ADDED MAX FOR WRAP */
+    max-height: 650px;
 }
 
 .type-b{
@@ -316,4 +317,36 @@ input:checked + .slider:before {
     min-width: 650px;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
+    flex-wrap:wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    max-height: 650px; /*ADDED MAX FOR WRAP */
+}
+
+.message-and-index, p{
+    font-size: var(--message-font-size);
+    font-family: var(--primary-font);
+    font-weight: 300;
+    text-align: center;
+    background-color: transparent;
+    color:var(--text-color);
+    align-items: center;
+    justify-content: center;
+}
+
+.top-border {
+    border-top: solid var(--matrix-box-background-color);
+}
+
+.bottom-border {
+    border-bottom: solid var(--matrix-box-background-color);
+}
+
+.left-border {
+    border-left: solid var(--matrix-box-background-color);
+}
+
+.right-border {
+    border-right: solid var(--matrix-box-background-color);
 }

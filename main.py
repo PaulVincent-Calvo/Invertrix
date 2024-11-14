@@ -79,12 +79,11 @@ def decrypt_message():
         # Convert the message to a list of integers
         encrypted_message = list(map(int, encrypted_message))
         
-        decrypted_message = decryptor.decrypt(encrypted_message, messageMatrixSize)
-        print(f"Decrypted message: {decrypted_message}")
+        decryption_details = decryptor.decrypt(encrypted_message, messageMatrixSize)
+        
+        print(f"Decryption Message: {decryption_details}")
         # Return the decrypted message as a JSON response
-        return jsonify({
-            'decrypted_message': decrypted_message
-        })
+        return jsonify(decryption_details)
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -296,7 +295,6 @@ class Encryptor:
 class Decryptor:
     def __init__(self, keyMatrix, general_methods):
         self.keyMatrix = keyMatrix
-        print(f"decrypt keymatrix: {keyMatrix}")
         self.general_methods = general_methods
 
     def decrypt(self, values, messageMatrixSize):
@@ -305,15 +303,26 @@ class Decryptor:
             reshapedValuesArray = self.general_methods.reshapeAnArray(valuesArray, messageMatrixSize)
             inverseKeyMatrix = np.linalg.inv(self.keyMatrix)
             productMatrix = np.matmul(reshapedValuesArray,inverseKeyMatrix)
+            roundedProductMatrix = np.ceil(productMatrix)
+            
+            roundUpLimit = 10
+            roundedInverseKeyMatrix = np.round(inverseKeyMatrix, roundUpLimit)
 
             reshapedProductMatrix = np.rint(np.reshape(productMatrix, -1, order='A')).astype(int)
             decryptedMessage = self.general_methods.alphabet[reshapedProductMatrix]
-            print(f"decryptedMessage: {decryptedMessage}")
             decryptedMessage = ''.join(decryptedMessage)
             
-            
+            decryption_details = {
+                'key_matrix': self.keyMatrix.tolist(), 
+                'reshaped_values_array': reshapedValuesArray.tolist(), # User input
+                'inverse_key_matrix': inverseKeyMatrix.tolist(),  # inverse of keymatrix
+                'rounded_inverse_key_matrix': roundedInverseKeyMatrix.tolist(),
+                'reshaped_product_matrix': roundedProductMatrix.tolist(), # product of user input and inverse key matrix
+                'decrypted_message': decryptedMessage # messsage
+            }
+
             self.printDecryptionDetails(reshapedValuesArray, inverseKeyMatrix, reshapedProductMatrix, decryptedMessage)
-            return decryptedMessage
+            return decryption_details
 
         except ValueError as e:
             return f"Error: {e}"
