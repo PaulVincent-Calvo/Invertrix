@@ -18,6 +18,10 @@ body{
     display: flex;
     flex-direction: column;
     background-color: var(--background-color);
+    overflow-x: hidden; 
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
 }
 
 /* header part */
@@ -281,13 +285,13 @@ input:checked + .slider:before {
     overflow-x: hidden;
     scroll-behavior: smooth;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1310px;
 }
 
 .step{
     display: flex;
     margin-top: 10px;
-    max-width: 1400px;
+    max-width: 1310px;
     flex-wrap: wrap;
     justify-content: space-around;
     min-width: 100%; /* Each step takes up full width of the container */  
@@ -297,8 +301,8 @@ input:checked + .slider:before {
 
 .type-a{
     display: flex;
-    min-height: 600px;
-    min-width: 650px;
+    min-height: 550px;
+    min-width: 605px;
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
@@ -311,10 +315,10 @@ input:checked + .slider:before {
 
 .type-b{
     display: flex;
+    min-height: 550px;
+    min-width: 605px;
     flex-direction: column;
     align-items: center;
-    min-height: 600px;
-    min-width: 650px;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
     flex-wrap:wrap;
@@ -349,4 +353,28 @@ input:checked + .slider:before {
 
 .right-border {
     border-right: solid var(--matrix-box-background-color);
+}
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1; 
+    width: 100vw; 
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+    display: flex;
+    justify-items: center; /* Horizontally center content */
+    align-content: center;
+}
+
+.modal-content {
+    background-color: var(--background-color);
+    padding: 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    min-width: 605px;
+    max-width: 1310px;
 }

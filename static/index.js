@@ -233,12 +233,9 @@ function updateStepsDisplay() {
                 </div>
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
-                    <div class = "space-top"></div>
                     <textarea id="output-textarea" readonly>Answer will appear here</textarea></div>
-                    <div class = "space-bottom"></div>
                 </div>
-            </div>
-        `;
+            </div>`;
     } else if (mode === 'mode2') {
         stepsContainer.innerHTML = `
             <div class="step">
@@ -290,8 +287,7 @@ function updateStepsDisplay() {
                     <p id= "decrypted-message-container"></p>
                     <div class = "space-bottom"></div>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 }
 
@@ -453,7 +449,10 @@ function displayMessage(text, container) {
     console.log("done");
 }
 
-// Toggle button function to call Encrypt or Decrypt based on mode
+// Get modal elements
+const resultsModal = document.getElementById('resultsModal');
+const modalResultsContainer = document.getElementById('modal-results-container');
+
 document.getElementById('encrypt-decrypt-button').addEventListener('click', async () => {
     const text = document.getElementById('text-box').value;
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
@@ -463,6 +462,14 @@ document.getElementById('encrypt-decrypt-button').addEventListener('click', asyn
     } else if (mode === 'mode2') { // Decrypt mode
         await decrypt(text, gridSize);
     }
+
+    resultsModal.style.display = 'block';
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target == resultsModal) {
+        resultsModal.style.display = 'none';
+    }
 });
 
 //START 
@@ -470,6 +477,9 @@ document.getElementById('encrypt-decrypt-button').addEventListener('click', asyn
 let defaultGridSize = 2;
 
 window.onload = () => {
+
+    resultsModal.style.display = 'none';
+
     updateGrid();
     callGenerateKeyMatrix();
     toggleMode();

@@ -41,16 +41,22 @@
                     </div>
                 </div>
             </div>
-            <div class = "results-container">
+         
+        </div>
+        <div id="resultsModal" class="modal">
+            <div class="modal-content">
+              <div class = "results-container">
                 <div class = "results-header" id = "class-header">
                     <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px"></button>
                     <p class = "results-header-steps" id="results-header-steps">Placeholder</p>
                     <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px"></button>
                 </div>
-                <div class = "results-steps"></div>
-            </div>            
-        </div>
 
+                <div id="modal-results-container" class="results-steps"></div>
+            </div>   
+            </div>
+        </div>
+          
         <script src = "{{ url_for('static', filename='index.js') }}"></script>
     </body>
 </html>
