@@ -23,17 +23,37 @@ function toggleMode() {
     const textArea = document.getElementById("text-box");
     const gridInputs = document.querySelectorAll('.cell'); // Select all grid input cells
     const generateKeyButton = document.getElementById("generate-key-button");
-    
+
+    // Remove previous event listeners to avoid duplicates
+    textArea.removeEventListener('input', validateNumericInput);
+    textArea.removeEventListener('input', validateEncryptInput);
+    textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'encrypt'));
+    textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'decrypt'));
+
     if (isEncryptMode) {
         actionButton.textContent = "Encrypt";
-        textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press “Encrypt”.";
+        textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press 'Encrypt'.";
         generateKeyButton.disabled = false;
         mode = 'mode1';
+        textArea.value = ''; // Clear the text area when switching to Encrypt mode
+        method=  'encrypt';
+
+        // Allow only alphabetic characters in Encrypt mode
+        textArea.addEventListener('input', validateEncryptInput);
+        textArea.addEventListener('paste', (e) => preventInvalidPaste(e, method));
+
     } else {
         actionButton.textContent = "Decrypt";
         textArea.placeholder = "To decrypt text, enter or paste it here. Then select the matrix size of your key matrix, input its values, and press decrypt.";
         generateKeyButton.disabled = true;
         mode = 'mode2';
+
+        textArea.value = ''; // Clear the text area when switching to Decrypt mode
+        method=  'decrypt';
+
+        // Allow only numeric characters in Decrypt mode
+        textArea.addEventListener('input', validateNumericInput);
+        textArea.addEventListener('paste', (e) => preventInvalidPaste(e, method));
     }
 
     currentStepIndex = 0;
@@ -96,6 +116,10 @@ function updateGrid() {
         // Add the event listener for arrow navigation
         cellInput.addEventListener('keydown', (e) => handleArrowNavigation(e, i, gridSize));
 
+        // Add input validation for numbers only
+        cellInput.addEventListener('input', (e) => enforceStrictPositiveNumericInput(e));
+        cellInput.addEventListener('paste', (e) => blockNonPositiveNumericPaste(e)); // Prevent invalid paste
+
         gridContainer.appendChild(cellInput);
     }
     addCellEventListeners(); 
@@ -103,6 +127,90 @@ function updateGrid() {
     // Call toggleMode after the grid is generated to set correct interaction mode
     toggleMode();
 }
+
+function enforceStrictPositiveNumericInput(event) {
+    const input = event.target;
+    let value = input.value;
+
+    while (value.startsWith(" ") || value.startsWith("-")) {
+        if (value.startsWith(" ")) {
+            value = value.slice(1); // Remove leading whitespace
+        }
+        if (value.startsWith("-")) {
+            value = value.slice(1); // Remove leading negative sign
+        }
+    }
+
+    if (!/^\d*$/.test(value)) {
+        value = value.replace(/[^0-9]/g, ''); // Remove any non-numeric character
+        showCustomAlert("Only positive numeric values are allowed.");
+    }
+    input.value = value;
+}
+
+function blockNonPositiveNumericPaste(event) {
+    const pastedData = (event.clipboardData || window.clipboardData).getData('text');
+    if (!/^\d*$/.test(pastedData)) {// Validate pasted data: only positive numeric values
+        event.preventDefault();
+        showCustomAlert("Pasted content must contain only positive numeric values.");
+    }
+}
+
+
+function showCustomAlert(message) {
+    const modal = document.getElementById('custom-alert');
+    const modalMessage = document.getElementById('custom-alert-message');
+    modalMessage.textContent = message;
+    modal.style.display = 'flex';
+}
+
+function closeCustomAlert() {
+    const modal = document.getElementById('custom-alert');
+    modal.style.display = 'none';
+}
+
+function validateNumericInput(event) {
+    const input = event.target;
+    let value = input.value;
+
+    // Remove leading whitespace if it exists
+    if (value.startsWith(" ")) {
+        value = value.trimStart();
+    }
+
+    // Allow positive or negative numeric values and spaces between them, with an optional space at the end
+    if (!/^(-?\d+(\s+-?\d+)*\s?)$/.test(value)) {
+        value = value.replace(/[^0-9\s]/g, ''); // Remove any non-numeric character except spaces
+        showCustomAlert("Only positive numeric values and spaces between them are allowed, with an optional space at the end.");
+    }
+
+    input.value = value;
+}
+
+function validateEncryptInput(event) {
+    const input = event.target;
+    const value = input.value;
+
+    // Allow only alphabetic characters (no numbers or symbols)
+    if (!/^[a-zA-Z][a-zA-Z\s]*$/.test(value)) { // 
+        input.value = value.slice(0, -1); // Remove the last invalid character
+        showCustomAlert("Only alphabetic characters and spaces are allowed, and it MUST start with a letter.");
+    }
+}
+
+function preventInvalidPaste(event, method) {
+    const pasteData = event.clipboardData.getData('text'); // Get the pasted content
+
+    // Allow or block based on the method
+    if (method === 'encrypt' && !/^[a-zA-Z][a-zA-Z\s]*$/.test(pasteData)) {
+        event.preventDefault();
+        showCustomAlert("Only alphabetic characters and spaces are allowed, and it MUST start with a letter.");
+    } else if (method === 'decrypt' && !/^(-?\d+(\s+-?\d+)*\s?)$/.test(pasteData)) {
+        event.preventDefault();
+        showCustomAlert("Pasting only positive numeric values and spaces between them are allowed.");
+    }
+}
+
 
 function handleArrowNavigation(event, currentIndex, gridSize) {
     let targetIndex;

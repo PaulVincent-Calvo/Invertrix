@@ -56,6 +56,13 @@
             </div>   
             </div>
         </div>
+
+        <div id="custom-alert" class="custom-alert-modal" style="display: none;">
+            <div class="custom-alert-content">
+                <p id="custom-alert-message"></p>
+                <button onclick="closeCustomAlert()">OK</button>
+            </div>
+        </div>            
           
         <script src = "{{ url_for('static', filename='index.js') }}"></script>
     </body>
