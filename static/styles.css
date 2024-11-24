@@ -35,6 +35,27 @@ header{
     margin: 10px; 
 }
 
+.information-page-button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    margin-left: auto;
+    align-self: flex-end;
+}
+
+.information-page-button{
+    height: 40px;
+    width: 40px;
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    font-size: var(--message-font-size);
+    font-weight: 500;
+    background-color: var(--background-color);
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+}
+
 .container{
     display: flex;
     width: 100%;
