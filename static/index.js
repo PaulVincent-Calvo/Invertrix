@@ -310,7 +310,7 @@ function updateStepsDisplay() {
                 <div class="step-1-container-2 type-b" id="step-1-container-2">
                 
                     <div class = "space-top"></div>
-                    <div id= "indices-grid-container"></div>
+                    <div id = "indices-grid-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
@@ -319,7 +319,7 @@ function updateStepsDisplay() {
                 <div class="step-2-container-1 type-b" id="step-2-container-1">
 
                     <div class = "space-top"></div>
-                    <div id= "copy-key-matrix-container"></div>
+                    <div id = "copy-key-matrix-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
@@ -335,13 +335,14 @@ function updateStepsDisplay() {
                 <div class="step-3-container-1 type-b" id="step-3-container-1">
 
                     <div class = "space-top"></div>
-                    <div id= "product-matrix-container"></div>
+                    <div id = "product-matrix-container"></div>
                     <div class = "space-bottom"></div>
                     
                 </div>
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
-                    <textarea id="output-textarea" readonly>Answer will appear here</textarea></div>
+                    <textarea class = "text-box" id = "output-textarea" readonly></textarea>
+                    <div class = "space-bottom"></div>
                 </div>
             </div>`;
     } else if (mode === 'mode2') {
@@ -349,50 +350,49 @@ function updateStepsDisplay() {
             <div class="step">
                 <div class = "step-1-container-1 type-a" id = "step-1-container-1">
                     <div class = "space-top"></div>
-                    <p id= "encrypted-message-container"></p>
+                    <p id = "encrypted-message-container"></p>
                     <div class = "space-bottom"></div>
                 </div>
                 <div class = "step-1-container-2 type-b" id = "step-1-container-2">
                     <div class = "space-top"></div>
-                    <div id= "input-to-grid-matrix-container"></div>
+                    <div id = "input-to-grid-matrix-container"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-2-container-1 type-b" id = "step-2-container-1">
                     <div class = "space-top"></div>
-                    <div id= "copy-key-matrix-container-decrypt"></div>
+                    <div id = "copy-key-matrix-container-decrypt"></div>
                     <div class = "space-bottom"></div>
                 </div>
 
                 <div class = "step-2-container-2 type-b" id = "step-2-container-2">
                     <div class = "space-top"></div>
-                    <div id= "inverse-key-matrix-container"></div>
+                    <div id = "inverse-key-matrix-container"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-3-container-1 type-b" id = "step-3-container-1">
                     <div class = "space-top"></div>
-                    <div id= "inverse-key-matrix-container-2"></div>
+                    <div id = "inverse-key-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
                 <div class = "step-3-container-2 type-b" id = "step-3-container-2">
                     <div class = "space-top"></div>
-                    <div id= "input-to-grid-matrix-container-2"></div>
+                    <div id = "input-to-grid-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-4-container-1 type-b" id = "step-4-container-1">
                     <div class = "space-top"></div>
-                    <div id= "product-matrix-container-decrypt"></div>
+                    <div id = "product-matrix-container-decrypt"></div>
                     <div class = "space-bottom"></div>
                 </div>
 
                 <div class = "step-4-container-2 type-a" id = "step-4-container-2">
-                    <div class = "space-top"></div>
-                    <p id= "decrypted-message-container"></p>
+                    <textarea class = "text-box" id = "decrypted-message-container" readonly></textarea>
                     <div class = "space-bottom"></div>
                 </div>
             </div>`;
