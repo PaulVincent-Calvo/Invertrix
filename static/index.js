@@ -341,7 +341,7 @@ function updateStepsDisplay() {
                 </div>
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
-                    <textarea class = "text-box" id = "output-textarea" readonly></textarea>
+                    <textarea class = "results-text-box" id = "output-textarea" readonly></textarea>
                     <div class = "space-bottom"></div>
                 </div>
             </div>`;
@@ -392,7 +392,7 @@ function updateStepsDisplay() {
                 </div>
 
                 <div class = "step-4-container-2 type-a" id = "step-4-container-2">
-                    <textarea class = "text-box" id = "decrypted-message-container" readonly></textarea>
+                    <textarea class = "results-text-box" id = "decrypted-message-container" readonly></textarea>
                     <div class = "space-bottom"></div>
                 </div>
             </div>`;

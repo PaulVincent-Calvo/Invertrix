@@ -322,6 +322,20 @@ input:checked + .slider:before {
     overflow-y: auto;
 }
 
+.results-text-box{
+    height: 90%;    
+    width: 580px;
+    margin: 10px;        
+    font-family: var(--primary-font);
+    font-size: var(--message-font-size);      
+    background-color: transparent; 
+    color: var(--text-color);           
+    outline: none;        
+    border: none;
+    resize: none;
+    overflow: hidden;
+}
+
 /*container types for messages or matrices*/
 .type-a{
     display: flex;
@@ -455,7 +469,6 @@ input:checked + .slider:before {
         display: flex;
         align-items: center;
         min-height: 10%;
-        border: 1px solid white;
         min-width: 600px;
     }
 
@@ -487,7 +500,7 @@ input:checked + .slider:before {
     }
 
     .message-container{
-        min-width: 550px;
+        min-width: 540px;
     }
 
     .text-box{
@@ -495,7 +508,7 @@ input:checked + .slider:before {
     }
 
     .key-matrix-container{
-        min-width: 550px;
+        min-width: 540px;
     }
 
     .previous-button img, .next-button img{
@@ -513,17 +526,38 @@ input:checked + .slider:before {
         max-width: 550px;
     }
 
+    .results-text-box{
+        width: 490px;
+    }
+
     .type-a{
         min-height: 500px;
-        min-width: 550px;
-        max-height: 600px;        
-        max-width: 550px;
+        max-height: 600px;       
+        width: 550; 
     }
     
     .type-b{
         min-height: 500px;
-        min-width: 500px;
-        max-height: 600px;        
-        max-width: 550px;
+        max-height: 600px;      
+        width: 550px;  
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 2px; /*smaller padding so that the results modal appears centered*/
+    }
+
+    /* Header adjustments */
+    header{
+        display: flex;
+        align-items: center;
+        min-height: 10%;
+        min-width: 600px;
+    }
+
+    .img{
+        width: 130px;
+        height: 25px;
     }
 }
