@@ -211,6 +211,33 @@ function preventInvalidPaste(event, method) {
     }
 }
 
+async function handleRateLimitPost() {
+    try {
+        const response = await fetch('/rate_limit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.status === 429) {
+            const errorData = await response.json(); // Parse the error response
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); // Use your existing function to display the alert
+        } else if (!response.ok) {
+            // Handle other non-success responses
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            // Successful response handling (if needed)
+            const result = await response.json();
+            console.log("Response:", result);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again."); // Fallback for unexpected errors
+    }
+}
 
 function handleArrowNavigation(event, currentIndex, gridSize) {
     let targetIndex;
@@ -251,18 +278,74 @@ document.getElementById('generate-key-button').addEventListener('click', async (
 
 async function callGenerateKeyMatrix(){
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    const response = await fetch('/generate-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ size: gridSize })
-    });
-    
-    keyMatrix = await response.json();
-    const cells = document.querySelectorAll('.cell');
-    keyMatrix.flat().forEach((value, index) => {
-        cells[index].value = value;
-    });
+    try{
+        const response = await fetch('/generate-key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ size: gridSize })
+        });
+
+        if (response.status === 429) {
+            const errorData = await response.json(); // Parse the error response
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message);
+        }else{
+            keyMatrix = await response.json();
+            const cells = document.querySelectorAll('.cell');
+            keyMatrix.flat().forEach((value, index) => {
+                cells[index].value = value;
+            });
+        }
+    }catch (error) {
+        console.error("Error:", error);
+        // Show a fallback error message
+        modalMessage.textContent = "An unexpected error occurred. Please try again.";
+        modal.style.display = 'flex'; // Show the alert
+    }
 }
+
+// async function callGenerateKeyMatrix() {
+//     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+//     const modal = document.getElementById('custom-alert');
+//     const modalMessage = document.getElementById('custom-alert-message');
+
+//     try {
+//         const response = await fetch('/generate-key', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ size: gridSize })
+//         });
+
+//         // Handle 429 Rate Limit error
+//         if (response.status === 429) {
+//             const errorData = await response.json(); // Parse the error response
+//             const message = errorData.message || "Rate limit exceeded. Please try again later.";
+//             modalMessage.textContent = message;
+//             modal.style.display = 'flex'; // Show the alert
+//         } else if (!response.ok) {
+//             // Handle other non-success responses
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         } else {
+//             // Successful response: Populate the key matrix in the UI
+//             const keyMatrix = await response.json();
+//             const cells = document.querySelectorAll('.cell');
+//             keyMatrix.flat().forEach((value, index) => {
+//                 cells[index].value = value;
+//             });
+//         }
+//     } catch (error) {
+//         console.error("Error:", error);
+//         // Show a fallback error message
+//         modalMessage.textContent = "An unexpected error occurred. Please try again.";
+//         modal.style.display = 'flex'; // Show the alert
+//     }
+
+//     // Close the modal when the button is clicked
+//     modal.querySelector('button').onclick = function () {
+//         modal.style.display = 'none';
+//     };
+// }
+
 // Previous step navigation
 function previousStep() {
     if (currentStepIndex > 0) {
@@ -399,37 +482,49 @@ function updateStepsDisplay() {
     }
 }
 
-async function encrypt(text, gridSize) {
+async function encrypt(text, gridSize) { 
     console.log("Encrypting text:", text);
-    console.log("Encryption done");
-    fetch('/encrypt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('/encrypt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
+        });
+
+        // Check for 429 rate limit status code
+        if (response.status === 429) {
+            const errorData = await response.json();
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); 
+            return; 
+        }
+        // Process successful response
+        const data = await response.json();
+        
         if (data.error) {
             console.error(data.error);
+            showCustomAlert(data.error);  // Show the error in the modal
         } else {
             console.log("Encryption Details:", data);
-            // Access individual properties as needed
             console.log("Message:", data.message); // User input
             console.log("Indices:", data.indices); // User Input to Numbers
             console.log("Reshaped Indices:", data.reshaped_indices); 
             console.log("Key Matrix:", data.key_matrix); 
             console.log("Product Matrix:", data.product_matrix);  
-            console.log("Encrypted Values:", data.encrypted_values);  
+            console.log("Encrypted Values:", data.encrypted_values);
 
-            displayMessageAndIndices(data.message,data.indices,gridSize);
-            displayMatrix(data.reshaped_indices,'indices-grid-container');
-            displayMatrix(data.reshaped_indices,'copy-grid-container');
+            // Display the results in the UI
+            displayMessageAndIndices(data.message, data.indices, gridSize);
+            displayMatrix(data.reshaped_indices, 'indices-grid-container');
+            displayMatrix(data.reshaped_indices, 'copy-grid-container');
             displayMatrix(data.key_matrix, 'copy-key-matrix-container');
             displayMatrix(data.product_matrix, 'product-matrix-container');
             displayResult(data.encrypted_values);
         }
-    })
-    .catch(error => console.error('Error:', error));
+    } catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again.");
+    }
 }
 
 function displayResult(encryptedValues) {
@@ -514,15 +609,21 @@ function displayMessageAndIndices(message, indices, gridSize) {
 async function decrypt(text, gridSize) {
     console.log("Decrypting text:", text);
     
-    const response = await fetch('/decrypt', {
+    try{
+        const response = await fetch('/decrypt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
-    })
-    .then(response => response.json())
-    .then(data => {
-        
+        })
 
+        if (response.status === 429) {
+            const errorData = await response.json();
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); 
+            return; 
+        }
+
+        const data = await response.json();
         if (data.error) {
             console.error(data.error);
         } else {
@@ -547,8 +648,13 @@ async function decrypt(text, gridSize) {
             displayMessage(data.decrypted_message, 'decrypted-message-container'); 
 
         }
-    })
-    .catch(error => console.error('Error:', error));
+
+    }catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again.");
+        return
+    }
+    
 }
 
 function displayMessage(text, container) {
