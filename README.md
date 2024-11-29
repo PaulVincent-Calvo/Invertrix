@@ -4,44 +4,71 @@
 <p align="center">by <strong>We Bare Bears</strong> 🐻🐼🐻‍❄️</p>
 
 
-
 ## ⭐ Project Overview
-**Invertrix** is a Python-based web app encryption tool that encrypts messages using **matrix-based cipher**.  It shows each step of the encryption and decryption process, making it easier for users to understand the mathematical operations and data structures involved in matrix-based cryptography.
-## 📐 System Architecture
-**The system consists of two main components:**
+**Invertrix** is a Python-based web app encryption tool that encrypts messages using **matrix-based cipher**.  It shows each step of the encryption and decryption process, making it easier for users to understand the mathematical operations involved in matrix-based cryptography. Key features include dynamic key generation, detailed encryption and decryption steps, input validation, and rate-limiting to ensure security and functionality.
 
-* **Frontend (Web Interface):** Built with HTML/CSS and JavaScript, it provides users with an interactive interface to input messages and view encrypted/decrypted outputs
-  * bla bla bla ...
-* **Backend (Python)**: The server-side logic handles the encryption and decryption processes, utilizing matrix operations to transform plaintext to ciphertext and vice versa.
-   * show formula
+## 📐 System Architecture
+**Key Components:**
+* **Frontend (Web Interface):** Built with HTML, CSS, and JavaScript to allow users to input messages and view encryption or decryption results.
+* **Backend (Flask API):** Handles matrix operations, encryption, and decryption logic using Python. 
  
-<!-- ## 🔒 Core Concept: Inverse Matrices to Encrypt and Decrypt Messages
-* **Encryption Process Using the Key Matrix**
-    1. **Generate the Key Matrix**: A key matrix is created as a crucial part of the encryption process. This matrix should be invertible to allow for successful decryption.
-    2. **Encrypt the Message**: The plaintext is divided into blocks, each converted to numeric values. Each block is then multiplied by the key matrix to produce the encrypted ciphertext.
-* **Decryption Process Using the Inverse of the Key Matrix**
-    1. **Find the Inverse of the Key Matrix**: The key matrix’s inverse is calculated to reverse the encryption process.
-    2. **Decrypt the Ciphertext**: The ciphertext is divided into blocks, each multiplied by the inverse of the key matrix, which reconstructs the original plaintext message -->
+**Component Interactions:**
+* Users input a message into the Frontend.
+* The Backend processes the request using Python libraries (e.g., NumPy) to perform matrix-based transformations.
+* Results are returned as JSON responses, which the Frontend displays dynamically.
+
+
+## 🔒 Formula: Inverse Matrices to Encrypt and Decrypt Messages
+* **Encryption Process**
+    1. **Key Matrix Generation:** Create an invertible key matrix.
+    2. **Encrypting the Message:** Convert the message into numeric values (M), reshape it into a matrix, and then multiply the key matrix and message matrix 
+        **(C = M × K)**
+* **Decryption Process**
+    1. **Key Matrix Inversion:**: Compute the inverse of the key matrix (K^-1) to reverse encryption.
+    2. **Decrypting the Ciphertext**: Multiply the ciphertext (C) with (K^-1), reshape it, and map values back to the alphabet
+       **(M = C × K^-1)**
   
 ## 🤖 Applied Computer Science Concept
 * **Cryptography**: Invertrix applies encryption and decryption, a branch of computer science dedicated to securing data by transforming it into unreadable formats.
 
 ## 🧬 Algorithms Used
-* **Matrix Multiplication:** The core algorithm for both encryption and decryption, where each message block is multiplied by the key matrix (or its inverse) to generate encrypted or decrypted data.
-* **Matrix Inversion:** Used to decrypt the message, involving calculating the inverse of the key matrix to reverse the encryption.
+* **Matrix Key Generation:** Randomly generates an invertible matrix using NumPy.
+* **Encryption Algorithm:**
+  * Maps each character of the plaintext to a numeric value.
+  * Converts the numeric sequence into a matrix and multiplies it with the key matrix to produce ciphertext.
+* **Decryption Algorithm:**
+  * Computes the inverse of the key matrix.
+  * Multiplies the ciphertext matrix by the inverse matrix.
+  * Maps numeric values back to their corresponding characters.
 
 ## 🛡️ Security Mechanisms
-* Sensitive operations like **encryption and decryption are handled on the backend**. This ensures that the core algorithms are not exposed to the client-side, preventing unauthorized users from accessing or modifying the encryption keys or processes.
-* User inputs are **validated** and **sanitized** to ensure data integrity and prevent any issues during processing.
+* **Rate Limiting:** Prevents excessive API requests, mitigating DoS attacks.
+* **Backend-only Processing:** Sensitive operations, such as key generation and matrix inversion, occur server-side, ensuring algorithms remain secure.
+* **Input Validation:** User inputs are **validated** and **sanitized** to ensure data integrity and prevent any issues during processing.
 
 ## 🤔 Development Process and Design Decisions
+The development of Invertrix focused on making the web app easy to use, visually appealing, and functional. 
+
+1. **Modular Design:** The backend uses separate classes for tasks like encryption, decryption, and validation, making the code easy to maintain and understand.
+2. **User Experience Focus:** The interface was designed with simplicity in mind, ensuring users can easily interact with the web app.
+3. **Error Handling:** Real-time input validation and meaningful error messages guide users to correct issues efficiently.
 
 ## ✅ Correctness and Efficiency
+**Ensuring Correctness:**
+* Inputs are validated to ensure correct formats, preventing errors.
+* Matrix operations are checked for invertibility to ensure accuracy.
+
+**Ensuring Efficiency:**
+  * NumPy optimizes matrix operations for faster computation.
+  * Rate limiting helps prevent spamming by controlling the number of requests users can make in a given time frame
 
 ## 🏃 How to Run the Project
-   Before you begin, ensure you have the following installed:
+You can access the web app online at https://invertrix.onrender.com/
+###### *Note: The app is hosted on a free Render account, so there may be a slight delay in loading initially. Please be patient.*
+
+If you prefer to run the web app locally, ensure you have the following installed:
 - **Python (version 3.x or later)** 
-- **Required Python libraries**: Numpy and Flask (see below for installation)
+- **Required Python libraries**: Numpy, Flask & Flask-limiter (see below for installation)
   
 1. Clone the repository:
 
@@ -55,7 +82,7 @@
     cd Invertrix
     ```
 
-3. Install the required dependencies (Flask and Numpy):
+3. Install the required dependencies (Flask, Numpy & Flask-limiter):
    ```bash
     pip install -r requirements.txt
     ```
@@ -66,8 +93,6 @@
 5. After running the script, open a web browser and go to http://127.0.0.1:5000 (or the IP address shown in your terminal).
 The Flask app will be served locally, and you should see it running in your browser.
 
-<!-- 6. You can also access the webapp online at [https://invertrix.onrender.com/](https://invertrix.onrender.com/)  
-   * *Note: There may be a delay on startup due to the testing phase and free hosting.* -->
 
 ## 👥 Contributors
 
@@ -83,7 +108,6 @@ The Flask app will be served locally, and you should see it running in your brow
 <!-- Hindi need. Gusto ko lng may ganto para may mabalikan ako sa future. wow future hehehe 🤓 -->
 
 ## 🔧 Built With
-
 * Frontend: HTML, CSS, JavaScript
 * Backend Logic:  Python + Numpy Library
 * API: Flask
