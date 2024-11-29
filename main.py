@@ -351,4 +351,6 @@ def informationPage():
     return render_template('information-page.html')
 
 if __name__ == "__main__":
-    app.run()
+    # Ensure that the app uses the correct port provided by Render's environment
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
