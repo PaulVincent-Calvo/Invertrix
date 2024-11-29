@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
+import os
 
 app = Flask(__name__, template_folder='templates')
 random_numbers_limit = 10000
