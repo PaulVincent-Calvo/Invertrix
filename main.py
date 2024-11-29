@@ -1,20 +1,12 @@
-from werkzeug.middleware.proxy_fix import ProxyFix
 from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
 
 app = Flask(__name__, template_folder='templates')
-app.wsgi_app = ProxyFix(app.wsgi_app)
-limiter = Limiter(app=app)
+random_numbers_limit = 10000
 
-def get_client_ip():
-    forwarded_for = request.headers.get('X-Forwarded-For')
-    if forwarded_for:
-        # X-Forwarded-For may have multiple IPs, we take the first one
-        return forwarded_for.split(',')[0]
-    return request.remote_addr
-
+limiter = Limiter(get_remote_address, app=app)
 
 @app.route('/')
 def index():
@@ -358,5 +350,5 @@ class Decryptor:
 def informationPage():
     return render_template('information-page.html')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    app.run()
