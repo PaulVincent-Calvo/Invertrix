@@ -1,9 +1,11 @@
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
 
 app = Flask(__name__, template_folder='templates')
+app.wsgi_app = ProxyFix(app.wsgi_app)
 random_numbers_limit = 10000
 
 # For Rate Limiting
