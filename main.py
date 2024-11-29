@@ -2,11 +2,9 @@ from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
-import os
 
 app = Flask(__name__, template_folder='templates')
 random_numbers_limit = 10000
-
 limiter = Limiter(get_remote_address, app=app)
 
 @app.route('/')
@@ -351,7 +349,5 @@ class Decryptor:
 def informationPage():
     return render_template('information-page.html')
 
-if __name__ == "__main__":
-    # Ensure that the app uses the correct port provided by Render's environment
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
