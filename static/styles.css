@@ -457,7 +457,7 @@ input:checked + .slider:before {
     display: flex;
     flex-wrap: wrap;
     height: auto;
-    min-width: 600px;
+    min-width: 580px;
     background-color: var(--text-box-background-color);
     font-family: var(--primary-font);
     align-items: center;
@@ -696,7 +696,9 @@ p{
         max-height: 580px;      
         width: 550px;  
     }
-    
+    .about-invertrix-container{
+        padding: 0px;
+    }
     .actual-method-container{
         flex-direction: column-reverse;
     }
