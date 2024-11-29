@@ -347,5 +347,9 @@ class Decryptor:
         except Exception as e:
             return f"An error occurred while printing decryption details: {e}"
 
+@app.route('/information-page')
+def informationPage():
+    return render_template('information-page.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

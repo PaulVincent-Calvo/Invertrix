@@ -22,6 +22,7 @@ body{
     margin: 0;
     padding: 0;
     max-width: 100%;
+    gap: 10px;
 }
 
 /* header part */
@@ -167,7 +168,6 @@ input:checked + .slider:before {
 }
 
 /* Key Matrix, clear matrix button, generate random values button*/
-
 .key-matrix-container {
     display: flex;
     flex-direction: column;
@@ -219,7 +219,6 @@ input:checked + .slider:before {
     align-items: center;
     height: 100%;
 }
-
 
 .cell {
     font-size: 20px; /* DITO NAIBA FONT SIZE */
@@ -453,6 +452,162 @@ input:checked + .slider:before {
     background: #45a049;
 }
 
+/*-------------------------------------------------------------------------------------------------------------------------*/
+.about-invertrix-container{
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    min-width: 600px;
+    background-color: var(--text-box-background-color);
+    font-family: var(--primary-font);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.about-invertrix-text{
+    display: flex;
+    align-items: center;
+}
+
+h1{
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.invertrix-information-text{
+    display: flex;
+    width: 90%;
+}
+
+p{
+    color: var(--text-color);
+}
+
+.multiplying-matrices-container{
+    max-width: 1400px;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.multiplying-matrices-information-container{
+    min-height: 600px;
+    width: 650px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--text-box-background-color);
+    border-radius: 20px;
+    align-content: center;
+    justify-content: center;
+}
+
+.multiplying-matrices-text{
+    padding: 10px;
+    text-align: center;
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    font-size: 1.75em;
+    font-weight: 500;
+    align-content: center;
+    justify-content: center;
+}
+
+.multiplying-matrices-information-text{
+    padding: 10px;
+    text-align: center;
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    font-weight: 500;
+    align-content: center;
+    justify-content: center;
+}
+
+.multiplying-matrices-video-container{
+    height: 600px;
+    width: 650px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--matrix-box-background-color);
+    border-radius: 20px;    
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Aspect Ratio 16:9 */
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none; /* Optional: Remove iframe border */
+}
+
+.actual-method-container{
+    max-width: 1400px;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.actual-method-information-container{
+    min-height: 600px;
+    width: 650px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--text-box-background-color);
+    border-radius: 20px;
+    align-content: center;
+    justify-content: center;
+}
+
+.actual-method-text{
+    padding: 10px;
+    text-align: center;
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    font-size: 1.75em;
+    font-weight: 500;
+    align-content: center;
+    justify-content: center;
+}
+
+.actual-method-information-text{
+    padding: 10px;
+    text-align: center;
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    font-weight: 500;
+    align-content: center;
+    justify-content: center;
+}
+
+.actual-method-video-container{
+    height: 600px;
+    width: 650px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--matrix-box-background-color);
+    border-radius: 20px;    
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
 @media (max-width: 600px) {
     :root{
         --message-font-size: 1.1em;
@@ -495,7 +650,7 @@ input:checked + .slider:before {
 
     /*main content adjustments*/
     .main-container{
-        max-width: 600px;
+        max-width: 580px;
         gap: 5px;
     }
 
@@ -504,7 +659,7 @@ input:checked + .slider:before {
     }
 
     .text-box{
-        width: 575px;
+        width: 565px;
     }
 
     .key-matrix-container{
@@ -532,14 +687,22 @@ input:checked + .slider:before {
 
     .type-a{
         min-height: 500px;
-        max-height: 600px;       
+        max-height: 580px;       
         width: 550; 
     }
     
     .type-b{
         min-height: 500px;
-        max-height: 600px;      
+        max-height: 580px;      
         width: 550px;  
+    }
+    
+    .actual-method-container{
+        flex-direction: column-reverse;
+    }
+
+    .multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
+        width: 580px;
     }
 }
 

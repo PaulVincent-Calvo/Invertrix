@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <title>Invertrix</title>
+        <link rel = "icon" type = "image/png" sizes = "32x32" href = "{{ url_for('static', filename='assets/invertrix-favicon.png') }}">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <header>
+            <div class = "logo">
+                <a href = "/">
+                    <img src = "{{ url_for('static', filename='assets/invertix-logo.png') }}" alt = "Invertrix Logo" width = "162px" height = "32px">                    
+                </a>
+            </div>
+            <div class = "information-page-button-container">
+                <a href = "/information-page">
+                    <button class = "information-page-button">?</button>                    
+                </a>
+            </div>
+        </header>
+
+        <div class = "main-container">
+            <div class = "about-invertrix-container">
+                <div class = "about-invertrix-text">
+                    <h1>ABOUT INVERTRIX</h1>
+                </div>
+                <div class = "invertrix-information-text">
+                    <p>Invertrix is a Python-based web app encryption tool that encrypts messages using matrix-based cipher. It shows each step of the encryption and decryption process, making it easier for users to understand the mathematical operations and data structures involved in matrix-based cryptography.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class = "multiplying-matrices-container">
+            <div class = "multiplying-matrices-information-container">
+                <div class = "multiplying-matrices-text">
+                    Multiplying Matrices
+                </div>
+                <div class = "multiplying-matrices-information-text">   
+                    In order to understand the method used by Invertrix to encrypt and decrypt messages, the concept of multiplying matrices must be understood. Watch the following video to understand this concept.
+                </div>
+            </div>
+            <div class = "multiplying-matrices-video-container">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/2spTnAiQg4M" 
+                            title="Multiplying Matrices" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class = "actual-method-container">
+            <div class = "actual-method-video-container">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/vrxzWNTtF68" 
+                            title="Multiplying Matrices" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class = "actual-method-information-container">
+                <div class = "actual-method-text">
+                    Inverse Matrices to Encrypt and Decrypt Messages
+                </div>
+                <div class = "actual-method-information-text">   
+                    Now that you've understood the concept of multiplying matrices, watch the following video in order to learn the method that is used by Invertrix to encrypt and decrypt your messages.
+                </div>
+            </div>
+        </div>
+
+        <script src = "{{ url_for('static', filename='index.js') }}"></script>
+    </body>
+</html>
