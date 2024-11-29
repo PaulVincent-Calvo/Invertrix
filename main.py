@@ -6,10 +6,15 @@ import numpy as np
 
 app = Flask(__name__, template_folder='templates')
 app.wsgi_app = ProxyFix(app.wsgi_app)
-random_numbers_limit = 10000
+limiter = Limiter(app=app)
 
-# For Rate Limiting
-limiter = Limiter(get_remote_address, app=app) 
+def get_client_ip():
+    forwarded_for = request.headers.get('X-Forwarded-For')
+    if forwarded_for:
+        # X-Forwarded-For may have multiple IPs, we take the first one
+        return forwarded_for.split(',')[0]
+    return request.remote_addr
+
 
 @app.route('/')
 def index():
