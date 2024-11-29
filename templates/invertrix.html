@@ -9,7 +9,16 @@
     </head>
     <body>
         <header>
-            <div class = "logo"><img src = "{{ url_for('static', filename='assets/invertix-logo.png') }}" alt = "Invertrix Logo" width = "162px" height = "32px"></div>
+            <div class = "logo">
+                <a href = "/">
+                    <img src = "{{ url_for('static', filename='assets/invertix-logo.png') }}" alt = "Invertrix Logo" width = "162px" height = "32px">                    
+                </a>
+            </div>
+            <div class = "information-page-button-container">
+                <a href = "/information-page">
+                    <button class = "information-page-button">?</button>                    
+                </a>
+            </div>
         </header>
         <div class = "container">
             <div class = "main-container">
@@ -45,17 +54,23 @@
         </div>
         <div id="resultsModal" class="modal">
             <div class="modal-content">
-              <div class = "results-container">
-                <div class = "results-header" id = "class-header">
-                    <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px"></button>
-                    <p class = "results-header-steps" id="results-header-steps">Placeholder</p>
-                    <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px"></button>
-                </div>
-
-                <div id="modal-results-container" class="results-steps"></div>
-            </div>   
+                <div class = "results-container">
+                    <div class = "results-header" id = "class-header">
+                        <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px"></button>
+                        <p class = "results-header-steps" id="results-header-steps"></p>
+                        <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px"></button>
+                    </div>
+                    <div id="modal-results-container" class="results-steps"></div>
+                </div>   
             </div>
         </div>
+
+        <div id="custom-alert" class="custom-alert-modal" style="display: none;">
+            <div class="custom-alert-content">
+                <p id="custom-alert-message"></p>
+                <button onclick="closeCustomAlert()">OK</button>
+            </div>
+        </div>            
           
         <script src = "{{ url_for('static', filename='index.js') }}"></script>
     </body>

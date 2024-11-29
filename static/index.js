@@ -23,17 +23,37 @@ function toggleMode() {
     const textArea = document.getElementById("text-box");
     const gridInputs = document.querySelectorAll('.cell'); // Select all grid input cells
     const generateKeyButton = document.getElementById("generate-key-button");
-    
+
+    // Remove previous event listeners to avoid duplicates
+    textArea.removeEventListener('input', validateNumericInput);
+    textArea.removeEventListener('input', validateEncryptInput);
+    textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'encrypt'));
+    textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'decrypt'));
+
     if (isEncryptMode) {
         actionButton.textContent = "Encrypt";
-        textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press “Encrypt”.";
+        textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press 'Encrypt'.";
         generateKeyButton.disabled = false;
         mode = 'mode1';
+        textArea.value = ''; // Clear the text area when switching to Encrypt mode
+        method=  'encrypt';
+
+        // Allow only alphabetic characters in Encrypt mode
+        textArea.addEventListener('input', validateEncryptInput);
+        textArea.addEventListener('paste', (e) => preventInvalidPaste(e, method));
+
     } else {
         actionButton.textContent = "Decrypt";
         textArea.placeholder = "To decrypt text, enter or paste it here. Then select the matrix size of your key matrix, input its values, and press decrypt.";
         generateKeyButton.disabled = true;
         mode = 'mode2';
+
+        textArea.value = ''; // Clear the text area when switching to Decrypt mode
+        method=  'decrypt';
+
+        // Allow only numeric characters in Decrypt mode
+        textArea.addEventListener('input', validateNumericInput);
+        textArea.addEventListener('paste', (e) => preventInvalidPaste(e, method));
     }
 
     currentStepIndex = 0;
@@ -96,12 +116,127 @@ function updateGrid() {
         // Add the event listener for arrow navigation
         cellInput.addEventListener('keydown', (e) => handleArrowNavigation(e, i, gridSize));
 
+        // Add input validation for numbers only
+        cellInput.addEventListener('input', (e) => enforceStrictPositiveNumericInput(e));
+        cellInput.addEventListener('paste', (e) => blockNonPositiveNumericPaste(e)); // Prevent invalid paste
+
         gridContainer.appendChild(cellInput);
     }
     addCellEventListeners(); 
     callGenerateKeyMatrix();
     // Call toggleMode after the grid is generated to set correct interaction mode
     toggleMode();
+}
+
+function enforceStrictPositiveNumericInput(event) {
+    const input = event.target;
+    let value = input.value;
+
+    while (value.startsWith(" ") || value.startsWith("-")) {
+        if (value.startsWith(" ")) {
+            value = value.slice(1); // Remove leading whitespace
+        }
+        if (value.startsWith("-")) {
+            value = value.slice(1); // Remove leading negative sign
+        }
+    }
+
+    if (!/^\d*$/.test(value)) {
+        value = value.replace(/[^0-9]/g, ''); // Remove any non-numeric character
+        showCustomAlert("Only positive numeric values are allowed.");
+    }
+    input.value = value;
+}
+
+function blockNonPositiveNumericPaste(event) {
+    const pastedData = (event.clipboardData || window.clipboardData).getData('text');
+    if (!/^\d*$/.test(pastedData)) {// Validate pasted data: only positive numeric values
+        event.preventDefault();
+        showCustomAlert("Pasted content must contain only positive numeric values.");
+    }
+}
+
+
+function showCustomAlert(message) {
+    const modal = document.getElementById('custom-alert');
+    const modalMessage = document.getElementById('custom-alert-message');
+    modalMessage.textContent = message;
+    modal.style.display = 'flex';
+}
+
+function closeCustomAlert() {
+    const modal = document.getElementById('custom-alert');
+    modal.style.display = 'none';
+}
+
+function validateNumericInput(event) {
+    const input = event.target;
+    let value = input.value;
+
+    // Remove leading whitespace if it exists
+    if (value.startsWith(" ")) {
+        value = value.trimStart();
+    }
+
+    // Allow positive or negative numeric values and spaces between them, with an optional space at the end
+    if (!/^(-?\d+(\s+-?\d+)*\s?)$/.test(value)) {
+        value = value.replace(/[^0-9\s]/g, ''); // Remove any non-numeric character except spaces
+        showCustomAlert("Only positive numeric values and spaces between them are allowed, with an optional space at the end.");
+    }
+
+    input.value = value;
+}
+
+function validateEncryptInput(event) {
+    const input = event.target;
+    const value = input.value;
+
+    // Allow only alphabetic characters (no numbers or symbols)
+    if (!/^[a-zA-Z][a-zA-Z\s]*$/.test(value)) { // 
+        input.value = value.slice(0, -1); // Remove the last invalid character
+        showCustomAlert("Only alphabetic characters and spaces are allowed, and it MUST start with a letter.");
+    }
+}
+
+function preventInvalidPaste(event, method) {
+    const pasteData = event.clipboardData.getData('text'); // Get the pasted content
+
+    // Allow or block based on the method
+    if (method === 'encrypt' && !/^[a-zA-Z][a-zA-Z\s]*$/.test(pasteData)) {
+        event.preventDefault();
+        showCustomAlert("Only alphabetic characters and spaces are allowed, and it MUST start with a letter.");
+    } else if (method === 'decrypt' && !/^(-?\d+(\s+-?\d+)*\s?)$/.test(pasteData)) {
+        event.preventDefault();
+        showCustomAlert("Pasting only positive numeric values and spaces between them are allowed.");
+    }
+}
+
+async function handleRateLimitPost() {
+    try {
+        const response = await fetch('/rate_limit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.status === 429) {
+            const errorData = await response.json(); // Parse the error response
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); // Use your existing function to display the alert
+        } else if (!response.ok) {
+            // Handle other non-success responses
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        } else {
+            // Successful response handling (if needed)
+            const result = await response.json();
+            console.log("Response:", result);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again."); // Fallback for unexpected errors
+    }
 }
 
 function handleArrowNavigation(event, currentIndex, gridSize) {
@@ -143,18 +278,74 @@ document.getElementById('generate-key-button').addEventListener('click', async (
 
 async function callGenerateKeyMatrix(){
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    const response = await fetch('/generate-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ size: gridSize })
-    });
-    
-    keyMatrix = await response.json();
-    const cells = document.querySelectorAll('.cell');
-    keyMatrix.flat().forEach((value, index) => {
-        cells[index].value = value;
-    });
+    try{
+        const response = await fetch('/generate-key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ size: gridSize })
+        });
+
+        if (response.status === 429) {
+            const errorData = await response.json(); // Parse the error response
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message);
+        }else{
+            keyMatrix = await response.json();
+            const cells = document.querySelectorAll('.cell');
+            keyMatrix.flat().forEach((value, index) => {
+                cells[index].value = value;
+            });
+        }
+    }catch (error) {
+        console.error("Error:", error);
+        // Show a fallback error message
+        modalMessage.textContent = "An unexpected error occurred. Please try again.";
+        modal.style.display = 'flex'; // Show the alert
+    }
 }
+
+// async function callGenerateKeyMatrix() {
+//     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
+//     const modal = document.getElementById('custom-alert');
+//     const modalMessage = document.getElementById('custom-alert-message');
+
+//     try {
+//         const response = await fetch('/generate-key', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ size: gridSize })
+//         });
+
+//         // Handle 429 Rate Limit error
+//         if (response.status === 429) {
+//             const errorData = await response.json(); // Parse the error response
+//             const message = errorData.message || "Rate limit exceeded. Please try again later.";
+//             modalMessage.textContent = message;
+//             modal.style.display = 'flex'; // Show the alert
+//         } else if (!response.ok) {
+//             // Handle other non-success responses
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         } else {
+//             // Successful response: Populate the key matrix in the UI
+//             const keyMatrix = await response.json();
+//             const cells = document.querySelectorAll('.cell');
+//             keyMatrix.flat().forEach((value, index) => {
+//                 cells[index].value = value;
+//             });
+//         }
+//     } catch (error) {
+//         console.error("Error:", error);
+//         // Show a fallback error message
+//         modalMessage.textContent = "An unexpected error occurred. Please try again.";
+//         modal.style.display = 'flex'; // Show the alert
+//     }
+
+//     // Close the modal when the button is clicked
+//     modal.querySelector('button').onclick = function () {
+//         modal.style.display = 'none';
+//     };
+// }
+
 // Previous step navigation
 function previousStep() {
     if (currentStepIndex > 0) {
@@ -202,7 +393,7 @@ function updateStepsDisplay() {
                 <div class="step-1-container-2 type-b" id="step-1-container-2">
                 
                     <div class = "space-top"></div>
-                    <div id= "indices-grid-container"></div>
+                    <div id = "indices-grid-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
@@ -211,7 +402,7 @@ function updateStepsDisplay() {
                 <div class="step-2-container-1 type-b" id="step-2-container-1">
 
                     <div class = "space-top"></div>
-                    <div id= "copy-key-matrix-container"></div>
+                    <div id = "copy-key-matrix-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
@@ -227,13 +418,14 @@ function updateStepsDisplay() {
                 <div class="step-3-container-1 type-b" id="step-3-container-1">
 
                     <div class = "space-top"></div>
-                    <div id= "product-matrix-container"></div>
+                    <div id = "product-matrix-container"></div>
                     <div class = "space-bottom"></div>
                     
                 </div>
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
-                    <textarea id="output-textarea" readonly>Answer will appear here</textarea></div>
+                    <textarea class = "results-text-box" id = "output-textarea" readonly></textarea>
+                    <div class = "space-bottom"></div>
                 </div>
             </div>`;
     } else if (mode === 'mode2') {
@@ -241,87 +433,98 @@ function updateStepsDisplay() {
             <div class="step">
                 <div class = "step-1-container-1 type-a" id = "step-1-container-1">
                     <div class = "space-top"></div>
-                    <p id= "encrypted-message-container"></p>
+                    <p id = "encrypted-message-container"></p>
                     <div class = "space-bottom"></div>
                 </div>
                 <div class = "step-1-container-2 type-b" id = "step-1-container-2">
                     <div class = "space-top"></div>
-                    <div id= "input-to-grid-matrix-container"></div>
+                    <div id = "input-to-grid-matrix-container"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-2-container-1 type-b" id = "step-2-container-1">
                     <div class = "space-top"></div>
-                    <div id= "copy-key-matrix-container-decrypt"></div>
+                    <div id = "copy-key-matrix-container-decrypt"></div>
                     <div class = "space-bottom"></div>
                 </div>
 
                 <div class = "step-2-container-2 type-b" id = "step-2-container-2">
                     <div class = "space-top"></div>
-                    <div id= "inverse-key-matrix-container"></div>
+                    <div id = "inverse-key-matrix-container"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-3-container-1 type-b" id = "step-3-container-1">
                     <div class = "space-top"></div>
-                    <div id= "inverse-key-matrix-container-2"></div>
+                    <div id = "inverse-key-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
                 <div class = "step-3-container-2 type-b" id = "step-3-container-2">
                     <div class = "space-top"></div>
-                    <div id= "input-to-grid-matrix-container-2"></div>
+                    <div id = "input-to-grid-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
             <div class="step">
                 <div class = "step-4-container-1 type-b" id = "step-4-container-1">
                     <div class = "space-top"></div>
-                    <div id= "product-matrix-container-decrypt"></div>
+                    <div id = "product-matrix-container-decrypt"></div>
                     <div class = "space-bottom"></div>
                 </div>
 
                 <div class = "step-4-container-2 type-a" id = "step-4-container-2">
-                    <div class = "space-top"></div>
-                    <p id= "decrypted-message-container"></p>
+                    <textarea class = "results-text-box" id = "decrypted-message-container" readonly></textarea>
                     <div class = "space-bottom"></div>
                 </div>
             </div>`;
     }
 }
 
-async function encrypt(text, gridSize) {
+async function encrypt(text, gridSize) { 
     console.log("Encrypting text:", text);
-    console.log("Encryption done");
-    fetch('/encrypt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('/encrypt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
+        });
+
+        // Check for 429 rate limit status code
+        if (response.status === 429) {
+            const errorData = await response.json();
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); 
+            return; 
+        }
+        // Process successful response
+        const data = await response.json();
+        
         if (data.error) {
             console.error(data.error);
+            showCustomAlert(data.error);  // Show the error in the modal
         } else {
             console.log("Encryption Details:", data);
-            // Access individual properties as needed
             console.log("Message:", data.message); // User input
             console.log("Indices:", data.indices); // User Input to Numbers
             console.log("Reshaped Indices:", data.reshaped_indices); 
             console.log("Key Matrix:", data.key_matrix); 
             console.log("Product Matrix:", data.product_matrix);  
-            console.log("Encrypted Values:", data.encrypted_values);  
+            console.log("Encrypted Values:", data.encrypted_values);
 
-            displayMessageAndIndices(data.message,data.indices,gridSize);
-            displayMatrix(data.reshaped_indices,'indices-grid-container');
-            displayMatrix(data.reshaped_indices,'copy-grid-container');
+            // Display the results in the UI
+            displayMessageAndIndices(data.message, data.indices, gridSize);
+            displayMatrix(data.reshaped_indices, 'indices-grid-container');
+            displayMatrix(data.reshaped_indices, 'copy-grid-container');
             displayMatrix(data.key_matrix, 'copy-key-matrix-container');
             displayMatrix(data.product_matrix, 'product-matrix-container');
             displayResult(data.encrypted_values);
         }
-    })
-    .catch(error => console.error('Error:', error));
+    } catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again.");
+    }
 }
 
 function displayResult(encryptedValues) {
@@ -406,15 +609,21 @@ function displayMessageAndIndices(message, indices, gridSize) {
 async function decrypt(text, gridSize) {
     console.log("Decrypting text:", text);
     
-    const response = await fetch('/decrypt', {
+    try{
+        const response = await fetch('/decrypt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, keyMatrix: keyMatrix, gridSize: gridSize })
-    })
-    .then(response => response.json())
-    .then(data => {
-        
+        })
 
+        if (response.status === 429) {
+            const errorData = await response.json();
+            const message = errorData.message || "Rate limit exceeded. Please try again later.";
+            showCustomAlert(message); 
+            return; 
+        }
+
+        const data = await response.json();
         if (data.error) {
             console.error(data.error);
         } else {
@@ -439,8 +648,13 @@ async function decrypt(text, gridSize) {
             displayMessage(data.decrypted_message, 'decrypted-message-container'); 
 
         }
-    })
-    .catch(error => console.error('Error:', error));
+
+    }catch (error) {
+        console.error("Error:", error);
+        showCustomAlert("An unexpected error occurred. Please try again.");
+        return
+    }
+    
 }
 
 function displayMessage(text, container) {

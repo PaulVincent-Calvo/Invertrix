@@ -1,16 +1,20 @@
 from flask import Flask, render_template, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import numpy as np
 
 app = Flask(__name__, template_folder='templates')
-
 random_numbers_limit = 10000
+
+# For Rate Limiting
+limiter = Limiter(get_remote_address, app=app) 
 
 @app.route('/')
 def index():
     return render_template('invertrix.html')
 
-
 @app.route('/generate-key', methods=['POST'])
+@limiter.limit("20 per minute") # 5 requests per minute per IP address
 def generate_key():
     # Retrieve the matrix size from the client (default is 2)
     data = request.get_json()
@@ -24,6 +28,7 @@ def generate_key():
     return jsonify(key_matrix)
 
 @app.route('/encrypt', methods=['POST'])
+@limiter.limit("10 per minute")
 def encrypt_message():
 
     data = request.get_json()
@@ -54,6 +59,7 @@ def encrypt_message():
     return jsonify(encryption_details)  # Return the dictionary directly as JSON
 
 @app.route('/decrypt', methods=['POST'])
+@limiter.limit("10 per minute")
 def decrypt_message():
     try:
         # Retrieve the encrypted message and key matrix from the client
@@ -87,6 +93,10 @@ def decrypt_message():
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.errorhandler(429)
+def ratelimit_error(error):
+    return jsonify(error="ratelimit exceeded", message="Too many requests"), 429
 
 class GeneralMethods:
     alphabet = np.array([' ','a','b','c','d','e','f','g','h','i','j',
@@ -336,6 +346,10 @@ class Decryptor:
             print(f"Decrypted Message: {decryptedMessage}")
         except Exception as e:
             return f"An error occurred while printing decryption details: {e}"
+
+@app.route('/information-page')
+def informationPage():
+    return render_template('information-page.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
