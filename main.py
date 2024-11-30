@@ -32,9 +32,6 @@ def encrypt_message():
     message = data.get('message')
     keyMatrix = data.get('keyMatrix')
     
-    if message is not None:
-        message = message.strip()
-    
     keyMatrix = np.array(keyMatrix)
 
     if keyMatrix.ndim != 2:

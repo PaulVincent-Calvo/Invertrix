@@ -8,6 +8,7 @@
         <link rel = "stylesheet" href = "{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>
+        <div id="mode-display" class="mode-display">Encrypt</div>
         <header>
             <div class = "logo">
                 <a href = "/">
@@ -16,7 +17,7 @@
             </div>
             <div class = "information-page-button-container">
                 <a href = "/information-page">
-                    <button class = "information-page-button">?</button>                    
+                    <button class = "information-page-button" onclick = "playInfoSound()">?</button>                    
                 </a>
             </div>
         </header>
@@ -26,7 +27,7 @@
                     <textarea class = "text-box" id = "text-box"></textarea>
                     <div class = "action-buttons-container">
                         <label class = "encrypt-decrypt-toggle-switch">
-                            <input type = "checkbox" id = "encrypt-decrypt-toggle" onchange = "toggleMode()" checked>
+                            <input type = "checkbox" id = "encrypt-decrypt-toggle" onchange = "toggleMode()" onclick = "playDropdownSound()" checked>
                             <span class = "slider"></span>
                         </label>
                         <button class = "encrypt-decrypt-button" id = "encrypt-decrypt-button">Encrypt</button>
@@ -45,7 +46,7 @@
                     <div class = "matrix-container" id = "matrix-container"></div>
                     <div class = "space-bottom"></div>
                     <div class = "action-buttons-container">
-                        <button class = "clear-matrix-button" id = "clear-matrix-button">Clear Matrix</button>
+                        <button class = "clear-matrix-button" id = "clear-matrix-button" onclick = "playClearSound()">Clear Matrix</button>
                         <button class = "generate-key-button" id = "generate-key-button">Generate Key</button>
                     </div>
                 </div>
@@ -56,9 +57,9 @@
             <div class="modal-content">
                 <div class = "results-container">
                     <div class = "results-header" id = "class-header">
-                        <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px"></button>
+                        <button class = "previous-button" id = "previous-button"><img src = "{{ url_for('static', filename='assets/left-arrow.png') }}" width = "32px" onclick = "playDropdownSound()"></button>
                         <p class = "results-header-steps" id="results-header-steps"></p>
-                        <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px"></button>
+                        <button class = "next-button" id = "next-button"><img src = "{{ url_for('static', filename='assets/right-arrow.png') }}"  width = "32px" onclick = "playDropdownSound()"></button>
                     </div>
                     <div id="modal-results-container" class="results-steps"></div>
                 </div>   
