@@ -14,15 +14,14 @@ def index():
 @app.route('/generate-key', methods=['POST'])
 @limiter.limit("20 per minute") # 5 requests per minute per IP address
 def generate_key():
-    # Retrieve the matrix size from the client (default is 2)
+
     data = request.get_json()
     size = data.get('size', 2)
 
-    # Create an instance of GeneralMethods and use it to generate an invertible matrix
     general_methods = GeneralMethods()
     key_matrix = general_methods.generateInvertibleMatrix(size)
 
-    # Return the generated matrix as a JSON response
+    print(key_matrix)
     return jsonify(key_matrix)
 
 @app.route('/encrypt', methods=['POST'])
@@ -33,13 +32,15 @@ def encrypt_message():
     message = data.get('message')
     keyMatrix = data.get('keyMatrix')
     
-    keyMatrix = np.array(keyMatrix)
+    if message is not None:
+        message = message.strip()
     
-    # Check if the key matrix is a valid 2D array
+    keyMatrix = np.array(keyMatrix)
+
     if keyMatrix.ndim != 2:
         return jsonify({"error": "Key matrix must be a 2D array"}), 400
     
-
+    
     keyMatrixSize = keyMatrix.shape[0]
     
     # Initialize GeneralMethods and Encryptor classes

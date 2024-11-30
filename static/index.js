@@ -2,6 +2,23 @@ let mode = 'mode1'; // Start with mode1 as default
 let currentStepIndex = 0; // Track the current step index
 let keyMatrix = null;
 
+const errorSound = new Audio('static/assets/sounds/error.mp3');
+const generateSound = new Audio('static/assets/sounds/generate.wav');
+const toggleSound = new Audio('static/assets/sounds/click.mp3');
+
+function playErrorSound() {
+    errorSound.currentTime = 0;
+    errorSound.play();
+}
+function playGenerateSound() {
+    generateSound.currentTime = 0.5;
+    generateSound.play();
+}
+function playToggleSound() {
+    toggleSound.currentTime = 0;
+    toggleSound.play();
+}
+
 // Step names for each mode
 const mode1Steps = [
     'Convert Message into a Matrix',
@@ -18,6 +35,7 @@ const mode2Steps = [
 const resultsStepsContainer = document.querySelector('.results-steps');
 
 function toggleMode() {
+    playToggleSound();
     const isEncryptMode = document.getElementById("encrypt-decrypt-toggle").checked;
     const actionButton = document.getElementById("encrypt-decrypt-button");
     const textArea = document.getElementById("text-box");
@@ -158,6 +176,7 @@ function blockNonPositiveNumericPaste(event) {
 
 
 function showCustomAlert(message) {
+    playErrorSound();
     const modal = document.getElementById('custom-alert');
     const modalMessage = document.getElementById('custom-alert-message');
     modalMessage.textContent = message;
@@ -191,6 +210,10 @@ function validateEncryptInput(event) {
     const input = event.target;
     const value = input.value;
 
+    if (value === "") {
+        return; // Skip validation if input is empty
+    }
+
     // Allow only alphabetic characters (no numbers or symbols)
     if (!/^[a-zA-Z][a-zA-Z\s]*$/.test(value)) { // 
         input.value = value.slice(0, -1); // Remove the last invalid character
@@ -222,20 +245,20 @@ async function handleRateLimitPost() {
         });
 
         if (response.status === 429) {
-            const errorData = await response.json(); // Parse the error response
+            const errorData = await response.json(); 
             const message = errorData.message || "Rate limit exceeded. Please try again later.";
-            showCustomAlert(message); // Use your existing function to display the alert
+            showCustomAlert(message); 
         } else if (!response.ok) {
             // Handle other non-success responses
             throw new Error(`HTTP error! Status: ${response.status}`);
         } else {
-            // Successful response handling (if needed)
+
             const result = await response.json();
             console.log("Response:", result);
         }
     } catch (error) {
         console.error("Error:", error);
-        showCustomAlert("An unexpected error occurred. Please try again."); // Fallback for unexpected errors
+        showCustomAlert("An unexpected error occurred. Please try again.");
     }
 }
 
@@ -276,9 +299,11 @@ document.getElementById('generate-key-button').addEventListener('click', async (
     callGenerateKeyMatrix();
 });
 
-async function callGenerateKeyMatrix(){
+async function callGenerateKeyMatrix() {
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    try{
+    let stopAnimation = null; // Declare the stopAnimation function in a broader scope
+
+    try {
         const response = await fetch('/generate-key', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -286,65 +311,55 @@ async function callGenerateKeyMatrix(){
         });
 
         if (response.status === 429) {
-            const errorData = await response.json(); // Parse the error response
+            const errorData = await response.json();
             const message = errorData.message || "Rate limit exceeded. Please try again later.";
             showCustomAlert(message);
-        }else{
+            return;
+        } else{
+            playGenerateSound();
             keyMatrix = await response.json();
             const cells = document.querySelectorAll('.cell');
-            keyMatrix.flat().forEach((value, index) => {
-                cells[index].value = value;
-            });
+            stopAnimation = startRandomNumberAnimation(cells);
+            setTimeout(() => {
+                stopAnimation(); // Stop the random number animation
+                keyMatrix.flat().forEach((value, index) => {
+                    cells[index].value = value;
+                });
+            }, 1200); // 1000ms (1 second) delay for visibility of animation
+        console.log("SUCK", keyMatrix);
         }
-    }catch (error) {
+        
+    } catch (error) {
+        if (stopAnimation) stopAnimation();
         console.error("Error:", error);
-        // Show a fallback error message
         modalMessage.textContent = "An unexpected error occurred. Please try again.";
-        modal.style.display = 'flex'; // Show the alert
+        modal.style.display = 'flex';
     }
+    
 }
 
-// async function callGenerateKeyMatrix() {
-//     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-//     const modal = document.getElementById('custom-alert');
-//     const modalMessage = document.getElementById('custom-alert-message');
+// Helper function for random number animation
+function startRandomNumberAnimation(cells) {
+    console.log("Starting random number animation...");
+    let animationInterval;
 
-//     try {
-//         const response = await fetch('/generate-key', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ size: gridSize })
-//         });
+    function generateRandomNumbers() {
+        cells.forEach((cell, index) => {
+            const randomValue = Math.floor(Math.random() * 10000); // Random value for animation
+            cell.value = randomValue; // Display random values
+        });
+    }
 
-//         // Handle 429 Rate Limit error
-//         if (response.status === 429) {
-//             const errorData = await response.json(); // Parse the error response
-//             const message = errorData.message || "Rate limit exceeded. Please try again later.";
-//             modalMessage.textContent = message;
-//             modal.style.display = 'flex'; // Show the alert
-//         } else if (!response.ok) {
-//             // Handle other non-success responses
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         } else {
-//             // Successful response: Populate the key matrix in the UI
-//             const keyMatrix = await response.json();
-//             const cells = document.querySelectorAll('.cell');
-//             keyMatrix.flat().forEach((value, index) => {
-//                 cells[index].value = value;
-//             });
-//         }
-//     } catch (error) {
-//         console.error("Error:", error);
-//         // Show a fallback error message
-//         modalMessage.textContent = "An unexpected error occurred. Please try again.";
-//         modal.style.display = 'flex'; // Show the alert
-//     }
+    // Start animation
+    animationInterval = setInterval(generateRandomNumbers, 100); // Update every 100ms
 
-//     // Close the modal when the button is clicked
-//     modal.querySelector('button').onclick = function () {
-//         modal.style.display = 'none';
-//     };
-// }
+    return function stopAnimation() {
+        clearInterval(animationInterval); // Stop the animation
+        console.log("Stopping random number animation...");
+
+    };
+}
+
 
 // Previous step navigation
 function previousStep() {
@@ -384,7 +399,7 @@ function scrollToCurrentStep() {
 // Updates the displayed steps for each mode
 function updateStepsDisplay() {
     const stepsContainer = document.querySelector('.results-steps');
-    stepsContainer.innerHTML = ''; // Clear existing content
+    stepsContainer.innerHTML = ''; 
 
     if (mode === 'mode1') {
         stepsContainer.innerHTML = `
@@ -484,6 +499,7 @@ function updateStepsDisplay() {
 
 async function encrypt(text, gridSize) { 
     console.log("Encrypting text:", text);
+    console.log("Key matrix: ", keyMatrix);
     try {
         const response = await fetch('/encrypt', {
             method: 'POST',
@@ -503,17 +519,10 @@ async function encrypt(text, gridSize) {
         
         if (data.error) {
             console.error(data.error);
-            showCustomAlert(data.error);  // Show the error in the modal
+            showCustomAlert(data.error);  
         } else {
             console.log("Encryption Details:", data);
-            console.log("Message:", data.message); // User input
-            console.log("Indices:", data.indices); // User Input to Numbers
-            console.log("Reshaped Indices:", data.reshaped_indices); 
-            console.log("Key Matrix:", data.key_matrix); 
-            console.log("Product Matrix:", data.product_matrix);  
-            console.log("Encrypted Values:", data.encrypted_values);
 
-            // Display the results in the UI
             displayMessageAndIndices(data.message, data.indices, gridSize);
             displayMatrix(data.reshaped_indices, 'indices-grid-container');
             displayMatrix(data.reshaped_indices, 'copy-grid-container');
@@ -544,15 +553,15 @@ function displayMatrix(Matrix, container) {
     if (numCols > 9 || numRows > 9) {
         minCellWidth = 'auto';
         minCellHeight = 'auto';
-        fontSize = 'auto';  // Smaller font for larger matrices
+        fontSize = 'auto';  
     } else if (numCols > 5 || numRows > 5) {
         minCellWidth = '4rem';
         minCellHeight = '4rem';
-        fontSize = '1rem';  // Medium font size
+        fontSize = '1rem';  
     } else {
         minCellWidth = '5rem';
         minCellHeight = '5rem';
-        fontSize = '20px';  // Larger font for smaller matrices
+        fontSize = '20px'; 
     }
 
     gridContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(${minCellWidth}, 1fr))`; 
@@ -628,12 +637,6 @@ async function decrypt(text, gridSize) {
             console.error(data.error);
         } else {
             console.log("Decryption Details:", data);
-            console.log("Key Matrix: ", data.key_matrix);
-            console.log("User Input for decrypt: ", data.reshaped_values_array);
-            console.log("Inverse of Key Matrix: ", data.inverse_key_matrix);
-            console.log("Rounded Inverse Matrix: ", data.rounded_inverse_key_matrix)
-            console.log("Result in Number Form: ", data.reshaped_product_matrix);
-            console.log("Decrypted Message: ", data.decrypted_message)
             
             displayMessage(text, 'encrypted-message-container');
             displayMatrix(data.reshaped_values_array, 'input-to-grid-matrix-container');
@@ -668,6 +671,7 @@ const resultsModal = document.getElementById('resultsModal');
 const modalResultsContainer = document.getElementById('modal-results-container');
 
 document.getElementById('encrypt-decrypt-button').addEventListener('click', async () => {
+    
     const text = document.getElementById('text-box').value;
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
 
@@ -691,9 +695,7 @@ window.addEventListener('click', (event) => {
 let defaultGridSize = 2;
 
 window.onload = () => {
-
     resultsModal.style.display = 'none';
-
     updateGrid();
     callGenerateKeyMatrix();
     toggleMode();
