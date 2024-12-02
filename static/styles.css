@@ -76,13 +76,13 @@ header{
 }
 
 /* text box and button for encryption decryption */
-.message-container{
+.message-container{    
+    display: flex;    
+    flex-direction: column;
     min-height: 600px;
     min-width: 650px;
-    display: flex;
-    flex-direction: column;
     background-color: var(--text-box-background-color);
-    border-radius: 20px;
+    border-radius: 20px;    
 }
 
 .text-box{
@@ -470,9 +470,10 @@ input:checked + .slider:before {
     background: #45a049;
 }
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------information page*/
 .about-invertrix-container{
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     height: auto;
     min-width: 580px;
@@ -485,6 +486,7 @@ input:checked + .slider:before {
 
 .about-invertrix-text{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -495,6 +497,7 @@ h1{
 
 .invertrix-information-text{
     display: flex;
+    flex-wrap: wrap;
     width: 90%;
 }
 
@@ -506,15 +509,15 @@ p{
     max-width: 1400px;
     margin-inline: auto;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
     gap: 10px;
 }
 
-.multiplying-matrices-information-container{
-    min-height: 600px;
-    width: 650px;
+.multiplying-matrices-information-container{    
     display: flex;
+    flex-wrap: wrap;
+    min-height: 600px;
+    min-width: 650px;
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
@@ -523,6 +526,7 @@ p{
 }
 
 .multiplying-matrices-text{
+    display: flex;
     padding: 10px;
     text-align: center;
     font-family: var(--primary-font);
@@ -534,6 +538,7 @@ p{
 }
 
 .multiplying-matrices-information-text{
+    display: flex;
     padding: 10px;
     text-align: center;
     font-family: var(--primary-font);
@@ -545,7 +550,7 @@ p{
 
 .multiplying-matrices-video-container{
     height: 600px;
-    width: 650px;
+    min-width: 650px;
     display: flex;
     flex-direction: column;
     background-color: var(--matrix-box-background-color);
@@ -575,15 +580,15 @@ p{
     max-width: 1400px;
     margin-inline: auto;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-around;
     gap: 10px;
 }
 
-.actual-method-information-container{
-    min-height: 600px;
-    width: 650px;
+.actual-method-information-container{    
     display: flex;
+    flex-wrap: wrap;
+    min-height: 600px;
+    min-width: 650px;
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
@@ -592,6 +597,7 @@ p{
 }
 
 .actual-method-text{
+    display: flex;
     padding: 10px;
     text-align: center;
     font-family: var(--primary-font);
@@ -603,6 +609,7 @@ p{
 }
 
 .actual-method-information-text{
+    display: flex;
     padding: 10px;
     text-align: center;
     font-family: var(--primary-font);
@@ -614,7 +621,7 @@ p{
 
 .actual-method-video-container{
     height: 600px;
-    width: 650px;
+    min-width: 650px;
     display: flex;
     flex-direction: column;
     background-color: var(--matrix-box-background-color);
@@ -623,126 +630,6 @@ p{
     justify-content: center;
     padding: 10px;
     box-sizing: border-box;
-}
-
-
-@media (max-width: 600px) {
-    :root{
-        --message-font-size: 1.1em;
-        --matrix-font-size: 1.5em;
-        --button-width: 150px;
-    }
-
-    body {
-        padding: 10px;
-    }
-
-    /* Header adjustments */
-    header{
-        display: flex;
-        align-items: center;
-        min-height: 10%;
-        min-width: 600px;
-    }
-
-    .img{
-        width: 100px;
-        height: 25px;
-    }
-
-    .information-page-button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px;
-        margin-left: auto;
-        align-self: flex-end;
-    }
-
-    .information-page-button {
-        height: 35px;
-        width: 35px;
-        border-radius: 20px;
-        font-size: 1em; /* Adjust font size */
-    }
-
-    /*main content adjustments*/
-    .main-container{
-        max-width: 580px;
-        gap: 5px;
-    }
-
-    .message-container{
-        min-width: 540px;
-    }
-
-    .text-box{
-        width: 565px;
-    }
-
-    .key-matrix-container{
-        min-width: 540px;
-    }
-
-    .previous-button img, .next-button img{
-        background-color: transparent;
-        width: 30px;
-        border-color: transparent;
-    }
-
-    .results-header-steps{
-        max-width: 350px;
-        flex-wrap: wrap;
-    }
-
-    .results-steps {
-        max-width: 550px;
-    }
-
-    .results-text-box{
-        width: 490px;
-    }
-
-    .type-a{
-        min-height: 500px;
-        max-height: 580px;       
-        width: 550; 
-    }
-    
-    .type-b{
-        min-height: 500px;
-        max-height: 580px;      
-        width: 550px;  
-    }
-    .about-invertrix-container{
-        padding: 0px;
-    }
-    .actual-method-container{
-        flex-direction: column-reverse;
-    }
-
-    .multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
-        width: 580px;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 2px; /*smaller padding so that the results modal appears centered*/
-    }
-
-    /* Header adjustments */
-    header{
-        display: flex;
-        align-items: center;
-        min-height: 10%;
-        min-width: 600px;
-    }
-
-    .img{
-        width: 130px;
-        height: 25px;
-    }
 }
 
 /*---------------------------------------------------- Animations*/
@@ -794,3 +681,196 @@ p{
 .mode-display.active {
     opacity: 1; 
 } */
+
+/*------------------------------------------------------------------------------------------------------------------------------- media queries*/
+@media (max-width: 425px){
+    :root{
+        --message-font-size: 1em;
+        --matrix-font-size: 1.2em;
+        --button-width: 120px;
+    }
+
+    body {
+        padding: 2px;   
+    }
+
+    /* Header adjustments */
+    header{
+        min-height: 10%;
+        width: 320px;
+    }
+
+    .logo img{
+        width: 130px;
+        height: 25px;
+    }
+
+    .information-page-button-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        align-self: flex-end;
+        border: 1px solid white;
+    }
+
+    .information-page-button{
+        height: 40px;
+        width: 40px;
+        font-family: var(--primary-font);
+        color: var(--text-color);
+        font-size: var(--message-font-size);
+        font-weight: 500;
+        background-color: var(--background-color);
+        border: 2px solid var(--text-color);
+        border-radius: 20px;
+        transition: transform 0.1s ease-in-out;
+    }
+    
+    .container{
+        gap: 10px;
+    }
+
+    .main-container{
+        max-width: 425px;
+        justify-content: center;
+    }
+
+    .message-container, .key-matrix-container{
+        min-width: 315px;
+        max-width: 420px;
+    }
+
+    .matrix-container{
+        grid-template-columns: repeat();
+    }
+
+    .text-box{
+        width: 95%;
+    }
+
+}
+
+
+@media (min-width: 426px) and (max-width: 768px) {
+    :root{
+        --message-font-size: 1.1em;
+        --matrix-font-size: 1.5em;
+        --button-width: 150px;
+    }
+
+    body {
+        padding: 5px;
+    }
+
+    /* Header adjustments */
+    header{
+        align-items: center;
+        min-height: 10%;
+        min-width: 426px;
+    }
+
+    .img{
+        width: 100px;
+        height: 25px;
+    }
+
+    .information-page-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+        margin-left: auto;
+        align-self: flex-end;
+    }
+
+    .information-page-button {
+        height: 35px;
+        width: 35px;
+        border-radius: 20px;
+        font-size: 1em; /* Adjust font size */
+    }
+
+    /*main content adjustments*/
+    .main-container{
+        min-width: 420px;
+        gap: 5px;
+    }
+
+    .message-container{
+        min-width: 420px;
+    }
+
+    .text-box{
+        width: 95%;
+    }
+
+    .key-matrix-container{
+        min-width: 420px;
+    }
+    
+    .modal{
+        width: 97vw; 
+        align-items: center;
+        background-color: blue;
+    }
+
+    .modal-content {    
+        min-width: 390px;
+    }
+
+    .previous-button img, .next-button img{
+        background-color: transparent;
+        width: 30px;
+        border-color: transparent;
+    }
+
+    .results-header-steps{
+        max-width: 350px;
+        flex-wrap: wrap;
+    }
+
+    .results-header-steps{
+        display: flex;
+        width: 250px;
+        font-family: var(--primary-font);
+        font-size: var(--message-font-size);
+        flex-wrap: wrap;
+    }
+    
+    .results-text-box{
+        min-width: 400px;
+    }
+
+    .results-steps {
+        min-width: 400px;
+    }
+
+    .type-a{
+        min-width: 400px;
+    }
+
+    .type-b{
+        min-width: 400px;
+    }
+
+    .about-invertrix-container{
+        min-width: 420px;
+    }
+    
+    .multiplying-matrices-container{
+        flex-direction: column;
+    }
+
+    .actual-method-container{
+        flex-direction: column-reverse;
+    }
+
+    .multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
+        min-width: 420px;
+        font-size: 1.2em;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+}
