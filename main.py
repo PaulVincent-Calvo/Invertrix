@@ -35,7 +35,7 @@ def encrypt_message():
     keyMatrix = np.array(keyMatrix)
 
     if keyMatrix.ndim != 2:
-        return jsonify({"error": "Key matrix must be a 2D array. Try generating a new one"}), 400
+        return jsonify({"error": "Input/Generate the key matrix"}), 400
     
     
     keyMatrixSize = keyMatrix.shape[0]

@@ -638,6 +638,7 @@ function displayMatrix(Matrix, container) {
 
 function displayMessageAndIndices(message, indices, gridSize) {
     const container = document.getElementById('step-1-container-1');
+    console.log(message,indices);
     container.innerHTML = ''; 
 
     for (let i = 0; i < indices.length; i++) {
