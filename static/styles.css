@@ -340,17 +340,21 @@ input:checked + .slider:before {
 }
 
 .results-text-box{
-    height: 90%;    
-    width: 580px;
-    margin: 10px;        
+    flex-grow: 1;
+    max-height: 90%;  
+    width: 580px;       
     font-family: var(--primary-font);
     font-size: var(--message-font-size);      
     background-color: transparent; 
     color: var(--text-color);           
     outline: none;        
     border: none;
-    resize: none;
-    overflow: hidden;
+    overflow: auto;
+}
+
+.space-bottom-result {
+    flex-grow: 0; 
+    height: 10px;
 }
 
 /*container types for messages or matrices*/
@@ -361,11 +365,12 @@ input:checked + .slider:before {
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
-    flex-wrap:wrap;
     align-items: center;
     justify-content: center;
-    max-width: 650px; /*ADDED MAX FOR WRAP */
-    max-height: 600px;
+    max-width: 605px; 
+    max-height:550px;
+    padding: 3px; 
+    overflow: auto;
 }
 
 .type-b{
@@ -376,11 +381,11 @@ input:checked + .slider:before {
     align-items: center;
     background-color: var(--matrix-box-background-color);
     border-radius: 20px;
-    flex-wrap:wrap;
-    align-items: center;
     justify-content: center;
-    max-width: 650px;
-    max-height: 600px; /*ADDED MAX FOR WRAP */
+    max-width: 605px;
+    max-height: 550px; 
+    overflow: auto;
+    padding: 3px; 
 }
 
 .message-and-index, p{
@@ -745,7 +750,7 @@ p{
     }
 }
 
-/*---------------------------------------------------- Animations*/
+/*---------------------------------------------------- Animations and scrollbar*/
 
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -791,3 +796,23 @@ p{
 .mode-display.active {
     opacity: 1; 
 }
+
+.results-text-box::-webkit-scrollbar, .type-a::-webkit-scrollbar, .type-b::-webkit-scrollbar, html::-webkit-scrollbar {
+    width: 12px;
+}
+
+.results-text-box::-webkit-scrollbar-track,.type-a::-webkit-scrollbar-track, .type-b::-webkit-scrollbar-track{
+    background: var(--text-color);
+    border-radius: 10px; 
+}
+
+.results-text-box::-webkit-scrollbar-thumb,.type-a::-webkit-scrollbar-thumb, .type-b::-webkit-scrollbar-thumb{
+    background: var(--background-color);
+    border-radius: 10px;
+    border: 2px solid var(--text-color);
+}
+
+.results-text-box::-webkit-scrollbar-thumb:hover,.type-a::-webkit-scrollbar-thumb:hover, .type-b::-webkit-scrollbar {
+    background: var(--text-box-background-color);
+}
+

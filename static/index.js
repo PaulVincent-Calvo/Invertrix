@@ -471,7 +471,7 @@ function updateStepsDisplay() {
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
                     <textarea class = "results-text-box" id = "output-textarea" readonly></textarea>
-                    <div class = "space-bottom"></div>
+                    <div class = "space-bottom-result"></div>
                 </div>
             </div>`;
     } else if (mode === 'mode2') {
@@ -588,8 +588,8 @@ function displayMatrix(Matrix, container) {
     // Adjust default cell size and font size based on matrix dimensions
     let minCellWidth, minCellHeight, fontSize;
     if (numCols > 9 || numRows > 9) {
-        minCellWidth = 'auto';
-        minCellHeight = 'auto';
+        minCellWidth = '3rem';
+        minCellHeight = '3rem';
         fontSize = 'auto';  
     } else if (numCols > 5 || numRows > 5) {
         minCellWidth = '4rem';
@@ -643,7 +643,7 @@ function displayMessageAndIndices(message, indices, gridSize) {
     for (let i = 0; i < indices.length; i++) {
         const cell = document.createElement('div');
         cell.className = 'message-and-index';
-        cell.textContent = `${message[i]} ${indices[i]}`; 
+        cell.textContent = `${message[i]} ➜ ${indices[i]}`; 
         container.appendChild(cell);
 
         if ((i + 1) % gridSize === 0) {
