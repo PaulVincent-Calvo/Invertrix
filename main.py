@@ -310,6 +310,7 @@ class Decryptor:
             reshapedValuesArray = self.general_methods.reshapeAnArray(valuesArray, messageMatrixSize)
             inverseKeyMatrix = np.linalg.inv(self.keyMatrix)
             productMatrix = np.matmul(reshapedValuesArray,inverseKeyMatrix)
+            
             roundedProductMatrix = np.ceil(productMatrix)
             
             roundUpLimit = 10
