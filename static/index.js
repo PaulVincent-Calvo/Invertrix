@@ -54,6 +54,7 @@ const mode2Steps = [
 
 const resultsStepsContainer = document.querySelector('.results-steps');
 
+
 const modeDisplay = document.getElementById('mode-display');
 const toggleCheckbox = document.getElementById('encrypt-decrypt-toggle');
 
@@ -61,7 +62,6 @@ function toggleMode() {
     const isEncryptMode = document.getElementById("encrypt-decrypt-toggle").checked;
     const actionButton = document.getElementById("encrypt-decrypt-button");
     const textArea = document.getElementById("text-box");
-    const gridInputs = document.querySelectorAll('.cell'); // Select all grid input cells
     const generateKeyButton = document.getElementById("generate-key-button");
 
     // Remove previous event listeners to avoid duplicates
@@ -139,8 +139,11 @@ function updateGrid() {
     const gridContainer = document.getElementById('matrix-container');
     gridContainer.innerHTML = '';
 
-    gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 5rem)`; // WIDTH OF CELL: 5rem 
-    
+    const screenWidth = window.innerWidth;
+    let cellWidth = screenWidth <= 480 ? '3.5rem' : '5rem'; // 3rem for small screens, 5rem for larger screens
+
+    // Apply the calculated cell width to the grid
+    gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, ${cellWidth})`; 
 
     for (let i = 0; i < gridSize * gridSize; i++) {
         const cellInput = document.createElement('input');
@@ -423,11 +426,11 @@ function updateStepsHeader() {
 
 // Scrolls the results container to the current step
 function scrollToCurrentStep() {
-    const stepWidth = resultsStepsContainer.clientWidth;
+    const stepWidth = resultsStepsContainer.offsetWidth; // Use offsetWidth for accuracy
     resultsStepsContainer.scrollTo({
         left: stepWidth * currentStepIndex,
         behavior: 'smooth'
-    });
+});
 }
 
 // Updates the displayed steps for each mode
@@ -474,6 +477,9 @@ function updateStepsDisplay() {
                 
                 <div class="step-3-container-2 type-a" id="step-3-container-2">
                     <textarea class = "results-text-box" id = "output-textarea" readonly></textarea>
+                    <div class="copy-container">
+                        <button class="copy-button" id="copy-button" onclick="copyText()">Copy</button>
+                    </div>
                     <div class = "space-bottom-result"></div>
                 </div>
             </div>`;
@@ -583,29 +589,42 @@ function displayResult(encryptedValues) {
 
 function displayMatrix(Matrix, container) {
     const gridContainer = document.getElementById(container);
-    gridContainer.innerHTML = ''; 
+    gridContainer.innerHTML = '';
 
     const numRows = Matrix.length;
     const numCols = Matrix[0].length;
 
-    // Adjust default cell size and font size based on matrix dimensions
+    // Determine viewport width for responsive adjustments
+    const viewportWidth = window.innerWidth;
+
     let minCellWidth, minCellHeight, fontSize;
-    if (numCols > 9 || numRows > 9) {
+
+    if (viewportWidth <= 480) { // Mobile screens
+        minCellWidth = '2rem';
+        minCellHeight = '2rem';
+        fontSize = '0.8rem';
+    } else if (viewportWidth <= 768) { // Tablet screens
         minCellWidth = '3rem';
         minCellHeight = '3rem';
-        fontSize = 'auto';  
+        fontSize = '0.9rem';
+    } else if (numCols > 9 || numRows > 9) { // Larger matrices
+        minCellWidth = '3rem';
+        minCellHeight = '3rem';
+        fontSize = 'auto';
     } else if (numCols > 5 || numRows > 5) {
         minCellWidth = '4rem';
         minCellHeight = '4rem';
-        fontSize = '1rem';  
-    } else {
+        fontSize = '1rem';
+    } else { // Default case
         minCellWidth = '5rem';
         minCellHeight = '5rem';
-        fontSize = '20px'; 
+        fontSize = '1.3rem';
     }
 
-    gridContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(${minCellWidth}, 1fr))`; 
+    // Apply grid template for responsiveness
+    gridContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(${minCellWidth}, 1fr))`;
 
+    // Create cells
     for (let row = 0; row < numRows; row++) {
         for (let col = 0; col < numCols; col++) {
             const cell = document.createElement('div');
@@ -621,10 +640,9 @@ function displayMatrix(Matrix, container) {
             cell.style.fontSize = fontSize;
 
             if (cell.textContent.length > 8) {
-                cell.style.minWidth = 'auto';  
-                cell.style.minHeight = 'auto';  
-                cell.style.fontSize = '1rem';
-                
+                cell.style.minWidth = 'auto';
+                cell.style.minHeight = 'auto';
+                cell.style.fontSize = '0.8rem'; // Reduce font size for large content
             }
 
             // Add borders for the outer cells
@@ -637,6 +655,7 @@ function displayMatrix(Matrix, container) {
         }
     }
 }
+
 
 
 function displayMessageAndIndices(message, indices, gridSize) {
@@ -716,8 +735,6 @@ function displayMessage(text, container) {
 
 // Get modal elements
 const resultsModal = document.getElementById('resultsModal');
-const modalResultsContainer = document.getElementById('modal-results-container');
-
 document.getElementById('encrypt-decrypt-button').addEventListener('click', async () => {
     
     const text = document.getElementById('text-box').value;
@@ -733,6 +750,14 @@ document.getElementById('encrypt-decrypt-button').addEventListener('click', asyn
         resultsModal.style.display = 'block';
     }
 });
+
+function copyText() {
+    const textarea = document.getElementById('output-textarea');
+    textarea.select(); 
+    textarea.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(textarea.value)
+}
+
 
 
 window.addEventListener('click', (event) => {

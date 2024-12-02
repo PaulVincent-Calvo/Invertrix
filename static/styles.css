@@ -21,14 +21,13 @@ body{
     overflow-x: hidden; 
     margin: 0;
     padding: 0;
-    max-width: 100%;
+    max-width: 100vw;
     gap: 10px;
 }
 
 /* header part */
 header{
     display: flex;
-    align-content: flex-start;
     min-height: 10%;
 }
 
@@ -126,12 +125,12 @@ header{
 
 .encrypt-decrypt-button:hover,.generate-key-button:hover,
 .clear-matrix-button:hover, .information-page-button:hover,
-.encrypt-decrypt-toggle-switch:hover, .previous-button:hover, .next-button:hover{
+.encrypt-decrypt-toggle-switch:hover, .previous-button:hover, .next-button:hover, .copy-button:hover {
     transform: scale(1.05);
 }
 .encrypt-decrypt-button:active,.generate-key-button:active,
 .clear-matrix-button:active,.information-page-button:active,
-.encrypt-decrypt-toggle-switch:active, .previous-button:active, .next-button:active{
+.encrypt-decrypt-toggle-switch:active, .previous-button:active, .next-button:active, .copy-button:active{
     transform: scale(0.90);
 }
 
@@ -217,7 +216,6 @@ input:checked + .slider:before {
 .matrix-container {
     margin: 10px;
     max-height: 80%;          
-    min-width: 625px; 
     display: grid;
     justify-content: center;
     align-items: center;
@@ -278,6 +276,8 @@ input:checked + .slider:before {
     transition: transform 0.1s ease-in-out;
 }
 
+
+
 .generate-key-button:disabled {
     opacity: 50%;
     cursor: not-allowed;
@@ -286,7 +286,6 @@ input:checked + .slider:before {
 /*second part - results of encryption/decryption*/  
 .results-container {
     overflow: hidden;
-    position: relative;
 }
 
 
@@ -325,7 +324,6 @@ input:checked + .slider:before {
     overflow-x: hidden;
     scroll-behavior: smooth;
     width: 100%;
-    max-width: 1310px;
 }
 
 .step{
@@ -341,8 +339,7 @@ input:checked + .slider:before {
 
 .results-text-box{
     flex-grow: 1;
-    max-height: 90%;  
-    width: 580px;       
+    max-height: 90%;      
     font-family: var(--primary-font);
     font-size: var(--message-font-size);      
     background-color: transparent; 
@@ -353,6 +350,24 @@ input:checked + .slider:before {
     resize: none;
 }
 
+.copy-container{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.copy-button {
+    padding: 8px 12px;
+    font-family: var(--primary-font);
+    font-size: var(--button-font-size, 0.9rem);
+    color: #fff;
+    background-color: var(--button-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
 .space-bottom-result {
     flex-grow: 0; 
     height: 10px;
@@ -362,7 +377,7 @@ input:checked + .slider:before {
 .type-a{
     display: flex;
     min-height: 550px;
-    min-width: 605px;
+    width: 605px;
     flex-direction: column;
     background-color: var(--text-box-background-color);
     border-radius: 20px;
@@ -378,7 +393,7 @@ input:checked + .slider:before {
 .type-b{
     display: flex;
     min-height: 550px;
-    min-width: 605px;
+    width: 605px;
     flex-direction: column;
     align-items: center;
     background-color: var(--matrix-box-background-color);
@@ -432,7 +447,7 @@ input:checked + .slider:before {
 }
 
 .modal-content {    
-    min-width: 500px;
+    width: 85%;
     max-width: 95%;
     background-color: var(--background-color);
     padding: 10px;
@@ -483,7 +498,6 @@ input:checked + .slider:before {
     display: flex;
     flex-wrap: wrap;
     height: auto;
-    min-width: 580px;
     background-color: var(--text-box-background-color);
     font-family: var(--primary-font);
     align-items: center;
@@ -503,7 +517,6 @@ h1{
 
 .invertrix-information-text{
     display: flex;
-    width: 90%;
 }
 
 p{
@@ -634,124 +647,6 @@ p{
 }
 
 
-@media (max-width: 600px) {
-    :root{
-        --message-font-size: 1.1em;
-        --matrix-font-size: 1.5em;
-        --button-width: 150px;
-    }
-
-    body {
-        padding: 10px;
-    }
-
-    /* Header adjustments */
-    header{
-        display: flex;
-        align-items: center;
-        min-height: 10%;
-        min-width: 600px;
-    }
-
-    .img{
-        width: 100px;
-        height: 25px;
-    }
-
-    .information-page-button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px;
-        margin-left: auto;
-        align-self: flex-end;
-    }
-
-    .information-page-button {
-        height: 35px;
-        width: 35px;
-        border-radius: 20px;
-        font-size: 1em; /* Adjust font size */
-    }
-
-    /*main content adjustments*/
-    .main-container{
-        max-width: 580px;
-        gap: 5px;
-    }
-
-    .message-container{
-        min-width: 540px;
-    }
-
-    .text-box{
-        width: 565px;
-    }
-
-    .key-matrix-container{
-        min-width: 540px;
-    }
-
-    .previous-button img, .next-button img{
-        background-color: transparent;
-        width: 30px;
-        border-color: transparent;
-    }
-
-    .results-header-steps{
-        max-width: 350px;
-        flex-wrap: wrap;
-    }
-
-    .results-steps {
-        max-width: 550px;
-    }
-
-    .results-text-box{
-        width: 490px;
-    }
-
-    .type-a{
-        min-height: 500px;
-        max-height: 580px;       
-        width: 550; 
-    }
-    
-    .type-b{
-        min-height: 500px;
-        max-height: 580px;      
-        width: 550px;  
-    }
-    .about-invertrix-container{
-        padding: 0px;
-    }
-    .actual-method-container{
-        flex-direction: column-reverse;
-    }
-
-    .multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
-        width: 580px;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 10px; /*smaller padding so that the results modal appears centered*/
-    }
-
-    /* Header adjustments */
-    header{
-        display: flex;
-        align-items: center;
-        min-height: 10%;
-        min-width: 600px;
-    }
-
-    .img{
-        width: 130px;
-        height: 25px;
-    }
-}
 
 /*---------------------------------------------------- Animations and scrollbar*/
 
@@ -828,3 +723,113 @@ html::-webkit-scrollbar {
     background: var(--text-box-background-color);
 }
 
+
+@media (max-width: 700px) {
+    :root{
+        --message-font-size: 1.2em;
+        --matrix-font-size: 0.8em;
+        --button-width: 150px;
+    }
+
+    body{
+        padding: 5px;
+    }
+    .cell{
+        font-size: 1em;
+        height: 3.5rem;
+    }
+
+    /* Header adjustments */
+    .results-header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 20%;
+    }
+
+    .matrix-container{
+        width:100vw;
+    }
+
+    .logo{
+        width: 20px;
+        height: 25px;
+    }
+    
+    .main-container{
+        width: 100vw;
+    }
+
+    .message-container{
+        min-width: 100%;
+    }
+    .message-and-index, p{
+        font-size: var(--message-font-size);
+    }
+
+    .text-box{
+        width: 100%;
+    }
+
+    .key-matrix-container{
+        min-width: 100%;
+    }
+
+    
+    .modal{
+        width: 100vw;
+        height: 100%;
+    }
+
+
+    .results-header-steps{
+        font-size:1rem;
+        width: 150px;
+    }
+    
+    .modal-content{
+        width: 80%;
+        margin: 20px;
+    }
+
+    .results-container{
+        width: 100%;
+    }
+
+    .step{
+        min-width: none;
+        min-height: none;
+    }
+
+    .type-a,.type-b{
+        min-width: 280px;
+        min-height: 200px;
+        max-height: 200px;
+    }
+
+    .actual-method-container{
+        flex-direction: column-reverse;
+    }
+
+    .main-container, .about-invertrix-container ,.multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
+        width: 100%;
+    }
+
+    .mode-display{
+        font-size: 0.6rem; 
+        margin: 0;
+        font-weight:500;
+    }
+
+    #copy-key-matrix-container, #product-matrix-container, #input-to-grid-matrix-container, 
+#copy-key-matrix-container-decrypt,#inverse-key-matrix-container,#input-to-grid-matrix-container-2, 
+#product-matrix-container-decrypt, #inverse-key-matrix-container-2, #indices-grid-container, #copy-grid-container{
+    margin: 10px;
+    max-height: 80%;          
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+}
