@@ -25,6 +25,7 @@
                 <div class = "message-container">
                     <textarea class = "text-box" id = "text-box"></textarea>
                     <div class = "action-buttons-container">
+                        <div id="mode-display" class="mode-display"></div>
                         <label class = "encrypt-decrypt-toggle-switch">
                             <input type = "checkbox" id = "encrypt-decrypt-toggle" onchange = "toggleMode()" onclick = "playDropdownSound()" checked>
                             <span class = "slider"></span>
@@ -52,7 +53,7 @@
             </div>
          
         </div>
-        <div id="resultsModal" class="modal">
+        <div id="resultsModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class = "results-container">
                     <div class = "results-header" id = "class-header">

@@ -54,7 +54,12 @@ const mode2Steps = [
 
 const resultsStepsContainer = document.querySelector('.results-steps');
 
+const modeDisplay = document.getElementById('mode-display');
+const toggleCheckbox = document.getElementById('encrypt-decrypt-toggle');
+
 function toggleMode() {
+
+
     const isEncryptMode = document.getElementById("encrypt-decrypt-toggle").checked;
     const actionButton = document.getElementById("encrypt-decrypt-button");
     const textArea = document.getElementById("text-box");
@@ -313,7 +318,7 @@ function handleArrowNavigation(event, currentIndex, gridSize) {
 document.getElementById('clear-matrix-button').addEventListener('click', () => {
     const cells = document.querySelectorAll('.cell');
     cells.forEach(cell => cell.value = '');
-    
+    keyMatrix = null;
     matrixContainer.classList.add('shake');
     setTimeout(() => matrixContainer.classList.remove('shake'), 500);
 });
@@ -363,8 +368,6 @@ async function callGenerateKeyMatrix() {
     }
     
 }
-const modeDisplay = document.getElementById('mode-display');
-const toggleCheckbox = document.getElementById('encrypt-decrypt-toggle');
 
 // Helper function for random number animation
 function startRandomNumberAnimation(cells) {
@@ -745,6 +748,13 @@ window.onload = () => {
     updateStepsHeader();
     updateStepsDisplay();
     scrollToCurrentStep();
+
+    modeDisplay.textContent = "Mode Toggle ➜ ";
+    modeDisplay.classList.add('active');
+
+    setTimeout(() => {
+        modeDisplay.classList.remove('active');
+    }, 2000);
 };
 
 document.getElementById('previous-button').addEventListener('click', previousStep);

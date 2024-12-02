@@ -35,7 +35,7 @@ def encrypt_message():
     keyMatrix = np.array(keyMatrix)
 
     if keyMatrix.ndim != 2:
-        return jsonify({"error": "Key matrix must be a 2D array"}), 400
+        return jsonify({"error": "Key matrix must be a 2D array. Try generating a new one"}), 400
     
     
     keyMatrixSize = keyMatrix.shape[0]
@@ -69,7 +69,7 @@ def decrypt_message():
         
         # Check if the key matrix is valid (must be 2D)
         if keyMatrix.ndim != 2:
-            return jsonify({"error": "Key matrix must be a 2D array"}), 400
+            return jsonify({"error": "Key matrix must be a 2D array. Input the key matrix"}), 400
         
         general_methods = GeneralMethods()
         # Calculate the message matrix size of the decrypted message
@@ -129,6 +129,7 @@ class GeneralMethods:
         
     def reshapeAnArray(self, basisArray, size):
         try:
+            print(self, basisArray, size)
             reshapedArray = basisArray.reshape(size[0], size[1])
         except ValueError as e:
             print(f"An error occurred: {e}")

@@ -765,32 +765,29 @@ p{
         opacity: 0.6;
     }
     50% {
-        transform: scale(1.1); /* Slightly scale up */
-        opacity: 1; /* Full opacity */
+        transform: scale(1.05); 
+        opacity: 1; 
     }
     100% {
-        transform: scale(1); /* Return to original size */
+        transform: scale(1); 
         opacity: 0.6;
     }
 }
 
 .generating {
-    animation: generating 1200ms ease-in-out infinite; /* Smooth, continuous animation */
+    animation: generating 1200ms ease-in-out infinite;
 }
 
-/* .mode-display { back up info pop
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.mode-display {
     font-family: var(--primary-font);
-    transform: translate(-50%, -50%);
-    font-size: 5em; 
-    font-weight: bold;
+    font-size: 1.6em; 
+    font-weight:400;
     color: var(--text-color);
     opacity: 0;
     transition: opacity 0.3s ease-in-out; 
+    margin-right: 10px;
 }
 
 .mode-display.active {
     opacity: 1; 
-} */
+}
