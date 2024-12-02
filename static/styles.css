@@ -734,7 +734,7 @@ p{
 
 @media (max-width: 768px) {
     body {
-        padding: 2px; /*smaller padding so that the results modal appears centered*/
+        padding: 10px; /*smaller padding so that the results modal appears centered*/
     }
 
     /* Header adjustments */
@@ -798,22 +798,31 @@ p{
     opacity: 1; 
 }
 
-.results-text-box::-webkit-scrollbar, .type-a::-webkit-scrollbar, .type-b::-webkit-scrollbar, html::-webkit-scrollbar {
+.results-text-box::-webkit-scrollbar, 
+.type-a::-webkit-scrollbar, 
+.type-b::-webkit-scrollbar, 
+html::-webkit-scrollbar {
     width: 12px;
 }
 
-.results-text-box::-webkit-scrollbar-track,.type-a::-webkit-scrollbar-track, .type-b::-webkit-scrollbar-track{
+.results-text-box::-webkit-scrollbar-track,
+.type-a::-webkit-scrollbar-track, 
+.type-b::-webkit-scrollbar-track,html::-webkit-scrollbar-track{
     background: var(--text-color);
     border-radius: 10px; 
 }
 
-.results-text-box::-webkit-scrollbar-thumb,.type-a::-webkit-scrollbar-thumb, .type-b::-webkit-scrollbar-thumb{
+.results-text-box::-webkit-scrollbar-thumb,
+.type-a::-webkit-scrollbar-thumb, 
+.type-b::-webkit-scrollbar-thumb, html::-webkit-scrollbar-thumb{
     background: var(--background-color);
     border-radius: 10px;
     border: 2px solid var(--text-color);
 }
 
-.results-text-box::-webkit-scrollbar-thumb:hover,.type-a::-webkit-scrollbar-thumb:hover, .type-b::-webkit-scrollbar {
+.results-text-box::-webkit-scrollbar-thumb:hover,
+.type-a::-webkit-scrollbar-thumb:hover, 
+.type-b::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
     background: var(--text-box-background-color);
 }
 
