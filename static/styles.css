@@ -350,6 +350,7 @@ input:checked + .slider:before {
     outline: none;        
     border: none;
     overflow: auto;
+    resize: none;
 }
 
 .space-bottom-result {
@@ -786,10 +787,10 @@ p{
 .mode-display {
     font-family: var(--primary-font);
     font-size: 1.6em; 
-    font-weight:400;
+    font-weight:600;
     color: var(--text-color);
     opacity: 0;
-    transition: opacity 0.3s ease-in-out; 
+    transition: opacity 1.5s ease;
     margin-right: 10px;
 }
 

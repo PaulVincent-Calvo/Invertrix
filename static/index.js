@@ -363,7 +363,7 @@ async function callGenerateKeyMatrix() {
     } catch (error) {
         if (stopAnimation) stopAnimation();
         console.error("Error:", error);
-        modalMessage.textContent = "An unexpected error occurred. Please try again.";
+        modalMessage.textContent = "An unexpected error occurred in generating the key matrix. Please try again.";
         modal.style.display = 'flex';
     }
     
@@ -569,7 +569,7 @@ async function encrypt(text, gridSize) {
         }
     } catch (error) {
         console.error("Error:", error);
-        showCustomAlert("An unexpected error occurred. Please try again.");
+        showCustomAlert("An unexpected error occurred in encrypting. Please try again.");
     }
 }
 
@@ -698,7 +698,7 @@ async function decrypt(text, gridSize) {
 
     }catch (error) {
         console.error("Error:", error);
-        showCustomAlert("An unexpected error occurred. Please try again.");
+        showCustomAlert("An unexpected error occurred in decrypting. Please try again.");
         return false;
     }
     

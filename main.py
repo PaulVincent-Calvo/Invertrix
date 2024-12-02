@@ -69,7 +69,7 @@ def decrypt_message():
         
         # Check if the key matrix is valid (must be 2D)
         if keyMatrix.ndim != 2:
-            return jsonify({"error": "Key matrix must be a 2D array. Input the key matrix"}), 400
+            return jsonify({"error": "Please generate/input a key matrix"}), 400
         
         general_methods = GeneralMethods()
         # Calculate the message matrix size of the decrypted message
