@@ -58,8 +58,6 @@ const modeDisplay = document.getElementById('mode-display');
 const toggleCheckbox = document.getElementById('encrypt-decrypt-toggle');
 
 function toggleMode() {
-
-
     const isEncryptMode = document.getElementById("encrypt-decrypt-toggle").checked;
     const actionButton = document.getElementById("encrypt-decrypt-button");
     const textArea = document.getElementById("text-box");
@@ -72,12 +70,13 @@ function toggleMode() {
     textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'encrypt'));
     textArea.removeEventListener('paste', (e) => preventInvalidPaste(e, 'decrypt'));
 
+    textArea.value = '';
+
     if (isEncryptMode) {
         actionButton.textContent = "Encrypt";
         textArea.placeholder = "To encrypt text, enter or paste it here. Then select a matrix size, and press 'Encrypt'.";
         generateKeyButton.disabled = false;
         mode = 'mode1';
-        textArea.value = ''; // Clear the text area when switching to Encrypt mode
         method=  'encrypt';
 
         // Allow only alphabetic characters in Encrypt mode
@@ -89,8 +88,6 @@ function toggleMode() {
         textArea.placeholder = "To decrypt text, enter or paste it here. Then select the matrix size of your key matrix, input its values, and press decrypt.";
         generateKeyButton.disabled = true;
         mode = 'mode2';
-
-        textArea.value = ''; // Clear the text area when switching to Decrypt mode
         method=  'decrypt';
 
         // Allow only numeric characters in Decrypt mode
@@ -106,18 +103,23 @@ function toggleMode() {
 
 function updateKeyMatrix() {
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
-    keyMatrix = [];
-    
-    // Loop through each grid cell and store the values in the keyMatrix
-    const cells = document.querySelectorAll('.cell');
-    let rowIndex = -1;
+    console.log("Keymatrix before update:", keyMatrix);
 
+    // Reinitialize keyMatrix as a gridSize x gridSize matrix filled with zeros
+    keyMatrix = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
+
+    // Loop through each grid cell and update keyMatrix
+    const cells = document.querySelectorAll('.cell');
     cells.forEach((cell, index) => {
-        if (index % gridSize === 0) rowIndex++;
-        if (!keyMatrix[rowIndex]) keyMatrix[rowIndex] = [];
-        keyMatrix[rowIndex].push(parseFloat(cell.value) || 0); // Use 0 if input is empty or invalid
+        const rowIndex = Math.floor(index / gridSize); // Calculate correct row index
+        const colIndex = index % gridSize; // Calculate correct column index
+        keyMatrix[rowIndex][colIndex] = parseFloat(cell.value) || 0; // Use 0 for empty or invalid input
     });
+
+    console.log("Updated Keymatrix:", keyMatrix);
 }
+
+
 
 // Add event listeners to each grid cell to update the keyMatrix on change
 function addCellEventListeners() {
@@ -132,6 +134,7 @@ function addCellEventListeners() {
 }
 
 function updateGrid() {
+    const textBoxContent = document.getElementById('text-box').value;
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
     const gridContainer = document.getElementById('matrix-container');
     gridContainer.innerHTML = '';
@@ -161,13 +164,12 @@ function updateGrid() {
         // Add input validation for numbers only
         cellInput.addEventListener('input', (e) => enforceStrictPositiveNumericInput(e));
         cellInput.addEventListener('paste', (e) => blockNonPositiveNumericPaste(e)); // Prevent invalid paste
-
         gridContainer.appendChild(cellInput);
     }
     addCellEventListeners(); 
     callGenerateKeyMatrix();
-    // Call toggleMode after the grid is generated to set correct interaction mode
-    toggleMode();
+
+    document.getElementById('text-box').value = textBoxContent;
 }
 
 function enforceStrictPositiveNumericInput(event) {
@@ -221,14 +223,15 @@ function validateNumericInput(event) {
         return; // Skip further validation
     }
 
-    // Allow positive or negative numeric values and spaces between them, with an optional space at the end
-    if (!/^(-?\d+(\s+-?\d+)*\s?)$/.test(value)) {
+    // Allow only positive numeric values and spaces between them, with an optional space at the end
+    if (!/^\d+(\s+\d+)*\s?$/.test(value)) {
         value = value.replace(/[^0-9\s]/g, ''); // Remove any non-numeric character except spaces
         showCustomAlert("Only positive numeric values and spaces between them are allowed, with an optional space at the end.");
     }
 
     input.value = value;
 }
+
 
 function validateEncryptInput(event) {
     const input = event.target;
@@ -330,7 +333,7 @@ document.getElementById('generate-key-button').addEventListener('click', async (
 async function callGenerateKeyMatrix() {
     const gridSize = parseInt(document.getElementById('radio-button-grid-size').value);
     let stopAnimation = null; // Declare the stopAnimation function in a broader scope
-
+    
     try {
         const response = await fetch('/generate-key', {
             method: 'POST',
@@ -661,6 +664,7 @@ async function decrypt(text, gridSize) {
     }
 
     console.log("Decrypting text:", text);
+    console.log("keyMatrix:", keyMatrix);
     
     try{
         const response = await fetch('/decrypt', {
@@ -678,14 +682,13 @@ async function decrypt(text, gridSize) {
 
         const data = await response.json();
         if (data.error) {
-            console.error(data.error);
-            showCustomAlert("Decryption failed: Check if the encrypted message or key matrix is incorrect.");
+            showCustomAlert(data.error);
+            return false;
         } else {
             console.log("Decryption Details:", data);
             
             displayMessage(text, 'encrypted-message-container');
             displayMatrix(data.reshaped_values_array, 'input-to-grid-matrix-container');
-
             displayMatrix(data.key_matrix, 'copy-key-matrix-container-decrypt');
             displayMatrix(data.rounded_inverse_key_matrix, 'inverse-key-matrix-container');
 
@@ -699,7 +702,7 @@ async function decrypt(text, gridSize) {
 
     }catch (error) {
         console.error("Error:", error);
-        showCustomAlert("An unexpected error occurred in decrypting. Please try again.");
+        showCustomAlert("Invalid key matrix or encrypted message. The resulting product matrix contains invalid indices. Please try again.");
         return false;
     }
     

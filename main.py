@@ -2,10 +2,52 @@ from flask import Flask, render_template, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
+import re
 
 app = Flask(__name__, template_folder='templates')
 random_numbers_limit = 10000
 limiter = Limiter(get_remote_address, app=app)
+
+class SecurityMethods:
+
+    @staticmethod
+    def validate_grid_size(size):
+        """Validate if the grid size is 2, 3, 4, or 5."""
+        if size not in [2, 3, 4, 5]:
+            return False
+        return True
+
+    @staticmethod
+    def validate_message(message):
+        """Validate that the message contains only alphabetical characters and spaces."""
+        allowed_pattern = re.compile(r'^[a-zA-Z ]*$')  # Only alphabetic letters and spaces
+        return bool(allowed_pattern.fullmatch(message))
+
+    @staticmethod
+    def validate_key_matrix(keyMatrix):
+        """Validate that the key matrix contains only positive numbers and each value is <= 10000."""
+        try:
+            keyMatrix = np.array(keyMatrix)
+            if keyMatrix.ndim != 2:
+                return False 
+            if np.any(np.abs(keyMatrix) > 10000): 
+                return False 
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def validate_encrypted_message(message):
+        """Validate that the encrypted message only contains positive integers and spaces."""
+        try:
+            message_list = list(map(int, message.split()))
+            if any(i <= 0 for i in message_list):
+                return False
+            return True
+        except ValueError:
+            return False
+
+security_methods = SecurityMethods()
 
 @app.route('/')
 def index():
@@ -17,6 +59,9 @@ def generate_key():
 
     data = request.get_json()
     size = data.get('size', 2)
+    
+    if not security_methods.validate_grid_size(size):
+        return jsonify({"error": "Grid size must be one of [2, 3, 4, 5]."}), 400
 
     general_methods = GeneralMethods()
     key_matrix = general_methods.generateInvertibleMatrix(size)
@@ -31,9 +76,19 @@ def encrypt_message():
     data = request.get_json()
     message = data.get('message')
     keyMatrix = data.get('keyMatrix')
+    gridSize = data.get('gridSize')
     
     keyMatrix = np.array(keyMatrix)
 
+    if not security_methods.validate_message(message):
+        return jsonify({"error": "Message must only contain alphabetic characters and spaces."}), 400
+
+    if not security_methods.validate_key_matrix(keyMatrix):
+        return jsonify({"error": "Key matrix must contain only positive numbers <= 10000."}), 400
+
+    if not security_methods.validate_grid_size(gridSize):
+        return jsonify({"error": "Grid size must be one of [2, 3, 4, 5]."}), 400
+    
     if keyMatrix.ndim != 2:
         return jsonify({"error": "Input/Generate the key matrix"}), 400
     
@@ -58,14 +113,21 @@ def encrypt_message():
 @limiter.limit("10 per minute")
 def decrypt_message():
     try:
-        # Retrieve the encrypted message and key matrix from the client
         data = request.get_json()
+        encrypted_message = data.get('message') 
+        keyMatrix = np.array(data.get('keyMatrix'))
+        keyMatrixSize = data.get('gridSize')
         
-        encrypted_message = data.get('message')  # Encrypted values separated by spaces or commas
+        if not security_methods.validate_encrypted_message(encrypted_message):
+            return jsonify({"error": "Encrypted message must contain only positive integers and spaces."}), 400
+
+        if not security_methods.validate_key_matrix(keyMatrix):
+            return jsonify({"error": "Key matrix must contain only positive numbers <= 10000."}), 400
+
+        if not security_methods.validate_grid_size(keyMatrixSize):
+            return jsonify({"error": "Grid size must be one of [2, 3, 4, 5]."}), 400
         
         keyMatrix = np.array(data.get('keyMatrix'))  # Get the key matrix from client
-        print(keyMatrix)
-        keyMatrixSize = data.get('gridSize')
         
         # Check if the key matrix is valid (must be 2D)
         if keyMatrix.ndim != 2:
@@ -75,11 +137,18 @@ def decrypt_message():
         # Calculate the message matrix size of the decrypted message
         messageMatrixSize = general_methods.calculateMessageMatrixSizeOfDecryptedMessage(encrypted_message, keyMatrixSize)
         
+            
         decryptor = Decryptor(keyMatrix, general_methods)
         encrypted_message = encrypted_message.split()  # Convert to list of strings
         
         # Convert the message to a list of integers
         encrypted_message = list(map(int, encrypted_message))
+        valuesArray = np.array(encrypted_message)
+        
+        expected_size = messageMatrixSize[0] * messageMatrixSize[1]
+        if valuesArray.size != expected_size:
+            error_message = f"Invalid values array size. Expected size: {expected_size}, but got: {valuesArray.size}"
+            return jsonify({"error": error_message}), 400
         
         decryption_details = decryptor.decrypt(encrypted_message, messageMatrixSize)
         
@@ -129,7 +198,7 @@ class GeneralMethods:
         
     def reshapeAnArray(self, basisArray, size):
         try:
-            print(self, basisArray, size)
+            print("SICK", basisArray)
             reshapedArray = basisArray.reshape(size[0], size[1])
         except ValueError as e:
             print(f"An error occurred: {e}")
@@ -146,7 +215,7 @@ class GeneralMethods:
             if min_condition > max_condition:
                 raise ValueError(f"min_condition cannot be greater than max_condition. Got min_condition={min_condition}, max_condition={max_condition}.")
 
-            # Generate a random matrix and check if it's invertible
+            # Generate a random matrix  and check if it's invertible
             while True:
                 matrix = np.random.randint(1, random_numbers_limit, (size, size))
                 condition_number = np.linalg.cond(matrix)
@@ -311,15 +380,27 @@ class Decryptor:
             inverseKeyMatrix = np.linalg.inv(self.keyMatrix)
             productMatrix = np.matmul(reshapedValuesArray,inverseKeyMatrix)
             
-            roundedProductMatrix = np.ceil(productMatrix)
+            roundedProductMatrix = np.where(
+                productMatrix >= 0,
+                np.floor(productMatrix + 0.5),
+                np.ceil(productMatrix - 0.5)
+            ).astype(int)
             
+            valid_indices = range(len(self.general_methods.alphabet))  # Valid indices for the alphabet array
+            if not np.all(np.isin(roundedProductMatrix, valid_indices)):
+                return {
+                    "error": "Invalid key matrix or encrypted message. The resulting product matrix contains invalid indices. Please try again."
+                }, 400
+                
             roundUpLimit = 10
             roundedInverseKeyMatrix = np.round(inverseKeyMatrix, roundUpLimit)
 
             reshapedProductMatrix = np.rint(np.reshape(productMatrix, -1, order='A')).astype(int)
+            print("reshaped product", reshapedProductMatrix)
             decryptedMessage = self.general_methods.alphabet[reshapedProductMatrix]
-            decryptedMessage = ''.join(decryptedMessage)
             
+            decryptedMessage = ''.join(decryptedMessage)
+           
             decryption_details = {
                 'key_matrix': self.keyMatrix.tolist(), 
                 'reshaped_values_array': reshapedValuesArray.tolist(), # User input
@@ -328,6 +409,7 @@ class Decryptor:
                 'reshaped_product_matrix': roundedProductMatrix.tolist(), # product of user input and inverse key matrix
                 'decrypted_message': decryptedMessage # messsage
             }
+
 
             self.printDecryptionDetails(reshapedValuesArray, inverseKeyMatrix, reshapedProductMatrix, decryptedMessage)
             return decryption_details
