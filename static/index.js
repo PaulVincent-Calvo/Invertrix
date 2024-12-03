@@ -1,6 +1,7 @@
 let mode = 'mode1'; // Start with mode1 as default
 let currentStepIndex = 0; // Track the current step index
 let keyMatrix = null;
+let isMuted = false; // Control Mute
 
 const errorSound = new Audio('static/assets/sounds/error.mp3');
 const generateSound = new Audio('static/assets/sounds/generate.wav');
@@ -10,34 +11,49 @@ const cryptSound = new Audio('static/assets/sounds/577026__nezuai__ui-sound-17.w
 const clearSound = new Audio('static/assets/sounds/342997__zenithinfinitivestudios__ui_correct_button11.wav');
 
 function playErrorSound() {
-    errorSound.currentTime = 0;
-    errorSound.play();
+    if (!isMuted) {
+        errorSound.currentTime = 0;
+        errorSound.play();
+    }
 }
-function playClearSound(){
-    clearSound.currentTime = 0.3;
-    clearSound.play();
+
+function playClearSound() {
+    if (!isMuted) {
+        clearSound.currentTime = 0.3;
+        clearSound.play();
+    }
 }
 
 function playGenerateSound() {
-    generateSound.currentTime = 0.5;
-    generateSound.play();
+    if (!isMuted) {
+        generateSound.currentTime = 0.5;
+        generateSound.play();
+    }
 }
 
 function playInfoSound() {
-    infoSound.currentTime = 0;
-    infoSound.play();
+    if (!isMuted) {
+        infoSound.currentTime = 0;
+        infoSound.play();
+    }
 }
+
 function playEncryptDecryptSound() {
-    cryptSound.currentTime = 0;
-    cryptSound.play();
+    if (!isMuted) {
+        cryptSound.currentTime = 0;
+        cryptSound.play();
+    }
+}
+
+function playDropdownSound() {
+    if (!isMuted) {
+        dropdownSound.currentTime = 0;
+        dropdownSound.play();
+    }
 }
 
 const dropdown = document.getElementById('radio-button-grid-size');
 const matrixContainer = document.getElementById('matrix-container');
-function playDropdownSound() {
-    dropdownSound.currentTime = 0;
-    dropdownSound.play();
-}
 
 // Step names for each mode
 const mode1Steps = [

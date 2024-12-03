@@ -124,12 +124,14 @@ header{
 
 .encrypt-decrypt-button:hover,.generate-key-button:hover,
 .clear-matrix-button:hover, .information-page-button:hover,
-.encrypt-decrypt-toggle-switch:hover, .previous-button:hover, .next-button:hover, .copy-button:hover {
+.encrypt-decrypt-toggle-switch:hover, .previous-button:hover, .next-button:hover, .copy-button:hover
+,.github-link:hover,.github-button:hover{
     transform: scale(1.05);
 }
 .encrypt-decrypt-button:active,.generate-key-button:active,
 .clear-matrix-button:active,.information-page-button:active,
-.encrypt-decrypt-toggle-switch:active, .previous-button:active, .next-button:active, .copy-button:active{
+.encrypt-decrypt-toggle-switch:active, .previous-button:active, .next-button:active, .copy-button:active
+,.github-link:active,.github-button:active{
     transform: scale(0.90);
 }
 
@@ -499,11 +501,42 @@ input:checked + .slider:before {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
+.main-container-info{
+    display: flex;
+    justify-content: center;
+}
+
+.github-button {
+    display: inline-flex;
+    align-items: center; 
+    height: 40px;
+    padding: 5px 20px;
+    margin: 20px 0 0; 
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    font-family: var(--primary-font);
+    font-weight: 600;
+    font-size: var(--message-font-size);
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.github-icon-big {
+    height: 20px; 
+    width: 20px;
+    margin-right: 10px; 
+}
+
 .about-invertrix-container{
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     height: auto;
-    background-color: var(--text-box-background-color);
+    width: 70%;
     font-family: var(--primary-font);
     align-items: center;
     justify-content: center;
@@ -518,37 +551,29 @@ input:checked + .slider:before {
 h1{
     color: var(--text-color);
     font-weight: 500;
+    margin: 0;
 }
 
 .invertrix-information-text{
     display: flex;
+    margin:0;
 }
 
 p{
     color: var(--text-color);
 }
 
-.multiplying-matrices-container{
+.video-container{
     max-width: 1400px;
     margin-inline: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 10px;
-}
-
-.multiplying-matrices-information-container{
-    min-height: 600px;
-    width: 650px;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--text-box-background-color);
-    border-radius: 20px;
-    align-content: center;
     justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-.multiplying-matrices-text{
+.title-information-text{
     padding: 10px;
     text-align: center;
     font-family: var(--primary-font);
@@ -559,27 +584,34 @@ p{
     justify-content: center;
 }
 
-.multiplying-matrices-information-text{
-    padding: 10px;
+.information-text{
+    padding: 2rem;
+    padding-top:0;
     text-align: center;
     font-family: var(--primary-font);
     color: var(--text-color);
-    font-weight: 500;
+    font-weight: 400;
     align-content: center;
     justify-content: center;
+    
 }
 
-.multiplying-matrices-video-container{
+.multiplying-matrices-container, .actual-method-container{
     height: 600px;
     width: 650px;
     display: flex;
     flex-direction: column;
-    background-color: var(--matrix-box-background-color);
+    background-color: var(--text-box-background-color);
     border-radius: 20px;    
     align-content: center;
     justify-content: center;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
+}
+
+.actual-method-container{
+    background-color: var(--matrix-box-background-color);
+    justify-content: center;
 }
 
 .video-wrapper {
@@ -597,62 +629,107 @@ p{
     border: none; /* Optional: Remove iframe border */
 }
 
-.actual-method-container{
-    max-width: 1400px;
-    margin-inline: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 10px;
+.actual-method-container {
+    padding: 20px;
+    text-align: center;
 }
 
-.actual-method-information-container{
-    min-height: 600px;
-    width: 650px;
+.actual-method-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.developer-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.developer-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background-color: var(--text-box-background-color);
-    border-radius: 20px;
-    align-content: center;
-    justify-content: center;
+    padding: 15px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    transition: transform 0.3s ease;
 }
 
-.actual-method-text{
-    padding: 10px;
-    text-align: center;
-    font-family: var(--primary-font);
-    color: var(--text-color);
-    font-size: 1.75em;
-    font-weight: 500;
-    align-content: center;
-    justify-content: center;
+.developer-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
 }
 
-.actual-method-information-text{
-    padding: 10px;
-    text-align: center;
-    font-family: var(--primary-font);
-    color: var(--text-color);
-    font-weight: 500;
-    align-content: center;
-    justify-content: center;
-}
-
-.actual-method-video-container{
-    height: 600px;
-    width: 650px;
+.developer-info {
     display: flex;
     flex-direction: column;
-    background-color: var(--matrix-box-background-color);
-    border-radius: 20px;    
-    align-content: center;
-    justify-content: center;
-    padding: 10px;
-    box-sizing: border-box;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
+.developer-name {
+    font-weight: bold;
+    margin: 0;
+    font-family: var(--primary-font);
+    font-size: 1.3rem;
+}
 
+.developer-role {
+    font-style: italic;
+    margin: 0;
+    font-family: var(--primary-font);
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
 
+.github-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 5px 20px;
+    width:max-content;
+    background-color: var(--button-color);
+    font-family: var(--primary-font);
+    color: var(--button-text-color);
+    border-radius: 5px;
+    transition: transform 0.1s ease-in-out;;
+}
+
+.github-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.information-text a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.3s, text-decoration 0.3s;
+}
+
+.information-text a:hover {
+    color: var(--button-color);
+    text-decoration: underline;
+}
+
+.information-text a + a {
+    margin-left: 5px;
+}
+
+.information-text a:before {
+    content: "• ";
+    font-weight: bold;
+    color: #7f8c8d;
+}
 
 @media (max-width:700px) {
     :root{
@@ -697,7 +774,7 @@ p{
         flex-wrap: wrap;
     }
 
-    .message-container{
+    .message-container,.about-invertrix-container{
         min-width: 100%;
     }
     .message-and-index, p{
@@ -741,11 +818,11 @@ p{
         max-height: 20vh;
     }
 
-    .actual-method-container{
-        flex-direction: column-reverse;
+    .main-container-info,.video-container{
+        width: 100%;
     }
 
-    .main-container, .about-invertrix-container ,.multiplying-matrices-information-container, .multiplying-matrices-video-container, .actual-method-information-container, .actual-method-video-container{
+    .about-invertrix-text h1{
         width: 100%;
     }
 

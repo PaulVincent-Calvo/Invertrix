@@ -21,27 +21,30 @@
             </div>
         </header>
 
-        <div class = "main-container">
-            <div class = "about-invertrix-container">
-                <div class = "about-invertrix-text">
+        <div class="main-container-info">
+            <div class="about-invertrix-container">
+                <div class="about-invertrix-text">
                     <h1>ABOUT INVERTRIX</h1>
                 </div>
-                <div class = "invertrix-information-text">
-                    <p>Invertrix is a Python-based web app encryption tool that encrypts messages using matrix-based cipher. It shows each step of the encryption and decryption process, making it easier for users to understand the mathematical operations and data structures involved in matrix-based cryptography.</p>
+                <div class="invertrix-information-text">
+                    <p>Invertrix is a python-based web tool designed to make cryptography easier to understand. It focuses on matrix-based cipher, a method that uses mathematical operations with matrices to secure messages.</p>
+                </div>
+                <div class="github-button-container" onclick="playDropdownSound()">
+                    <a href="https://github.com/PaulVincent-Calvo/Invertrix" target="_blank" class="github-button">
+                        <img src="{{ url_for('static', filename='assets/github.png') }}" alt="GitHub Icon" class="github-icon-big">
+                        View on GitHub
+                    </a>
                 </div>
             </div>
         </div>
-
-        <div class = "multiplying-matrices-container">
-            <div class = "multiplying-matrices-information-container">
-                <div class = "multiplying-matrices-text">
-                    Multiplying Matrices
+        <div class = "video-container">
+            <div class = "multiplying-matrices-container">
+                <div class = "title-information-text">
+                    Matrix Multiplication
                 </div>
-                <div class = "multiplying-matrices-information-text">   
-                    In order to understand the method used by Invertrix to encrypt and decrypt messages, the concept of multiplying matrices must be understood. Watch the following video to understand this concept.
+                <div class = "information-text">   
+                    Multiplying matrices is the key to understanding how Invertrix encrypts and decrypts messages. Watch this video to grasp the basics.
                 </div>
-            </div>
-            <div class = "multiplying-matrices-video-container">
                 <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/2spTnAiQg4M" 
                             title="Multiplying Matrices" 
@@ -49,10 +52,14 @@
                             allowfullscreen></iframe>
                 </div>
             </div>
-        </div>
 
-        <div class = "actual-method-container">
-            <div class = "actual-method-video-container">
+            <div class = "actual-method-container">
+                <div class = "title-information-text">
+                    Applying Inverse Matrices
+                </div>
+                <div class = "information-text">   
+                    This video walks you through how inverse matrices are used in Invertrix to encrypt and decrypt messages step by step.
+                </div>
                 <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/vrxzWNTtF68" 
                             title="Multiplying Matrices" 
@@ -60,14 +67,69 @@
                             allowfullscreen></iframe>
                 </div>
             </div>
-            <div class = "actual-method-information-container">
-                <div class = "actual-method-text">
-                    Inverse Matrices to Encrypt and Decrypt Messages
-                </div>
-                <div class = "actual-method-information-text">   
-                    Now that you've understood the concept of multiplying matrices, watch the following video in order to learn the method that is used by Invertrix to encrypt and decrypt your messages.
+
+            <div class="actual-method-container">
+                <div class="title-information-text">Invertrix Developers</div>
+            
+                <div class="information-text">  + We Bare Bears + </div>
+            
+                <!-- Developer Cards -->
+                <div class="developer-container">
+                    
+                    <!-- Vivs's Card -->
+                    <div class="developer-card">
+                        <img src="{{ url_for('static', filename='assets/Grizz.jpg') }}" alt="Vivs's Profile" class="developer-img">
+                        <div class="developer-info">
+                            <p class="developer-name">Vivs</p>
+                            <p class="developer-role">Fullstack / Project Manager</p>
+                            <a href="https://github.com/VivieneGarcia" target="_blank" class="github-link" onclick="playDropdownSound()">
+                                <img src="{{ url_for('static', filename='assets/github.png') }}" alt="GitHub Icon" class="github-icon"> Vivs' GitHub
+                            </a>
+                        </div>
+                    </div>
+            
+                    <!-- Paul's Card -->
+                    <div class="developer-card">
+                        <img src="{{ url_for('static', filename='assets/ice.jpg') }}" alt="Paul's Profile" class="developer-img">
+                        <div class="developer-info">
+                            <p class="developer-name">Paul</p>
+                            <p class="developer-role">Frontend Developer</p>
+                            <a href="https://github.com/PaulVincent-Calvo" target="_blank" class="github-link" onclick="playDropdownSound()">
+                                <img src="{{ url_for('static', filename='assets/github.png') }}" alt="GitHub Icon" class="github-icon"> Paul's GitHub
+                            </a>
+                        </div>
+                    </div>
+            
+                    <!-- Ace's Card -->
+                    <div class="developer-card">
+                        <img src="{{ url_for('static', filename='assets/Panda.jpg') }}" alt="Ace's Profile" class="developer-img">
+                        <div class="developer-info">
+                            <p class="developer-name">Ace</p>
+                            <p class="developer-role">Backend Developer</p>
+                            <a href="https://github.com/AcePenaflorida" target="_blank" class="github-link" onclick="playDropdownSound()">
+                                <img src="{{ url_for('static', filename='assets/github.png') }}" alt="GitHub Icon" class="github-icon"> Ace's GitHub
+                            </a>
+                        </div>
+                    </div>
+            
                 </div>
             </div>
+            
+
+            <div class = "multiplying-matrices-container">
+                <div class = "title-information-text">
+                    Attributions: 
+                </div>
+                <div class = "information-text">   
+                    <a href="https://www.flaticon.com/free-icons/github" title="github icons" target="_blank"> Github icons created by Pixel perfect - Flaticon</a>
+                    <a href="https://freesound.org/people/chewiesmissus/sounds/213387/" target="_blank">CupboardDoorLatchClick1.wav</a> by <a href="https://freesound.org/people/chewiesmissus/" target="_blank">chewiesmissus</a> | License: <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons 0</a>
+                    <a href="https://freesound.org/people/ZenithInfinitiveStudios/sounds/342997/" target="_blank">UI_Correct_button11.wav</a> by <a href="https://freesound.org/people/ZenithInfinitiveStudios/" target="_blank">ZenithInfinitiveStudios</a> | License: <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons 0</a>
+                    <a href="https://freesound.org/people/nezuai/sounds/577026/" target="_blank">ui sound 17.wav</a> by <a href="https://freesound.org/people/nezuai/" target="_blank">nezuai</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Attribution 4.0</a>
+                    <a href="https://freesound.org/people/Universfield/sounds/730120/" target="_blank">Error #5</a> by <a href="https://freesound.org/people/Universfield/" target="_blank">Universfield</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Attribution 4.0</a>
+                    <a href="https://freesound.org/people/MATRIXXX_/sounds/705952/" target="_blank">AI Technology.wav</a> by <a href="https://freesound.org/people/MATRIXXX_/" target="_blank">MATRIXXX_</a> | License: <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons 0</a>
+                </div>
+            </div>
+            
         </div>
 
         <script src = "{{ url_for('static', filename='index.js') }}"></script>
