@@ -724,7 +724,7 @@ p{
     .modal-content{
         width: 80%;
         height: auto;
-        margin: 20px;
+        margin: auto;
     }
 
     .results-container{
@@ -737,10 +737,10 @@ p{
     }
 
     .type-a,.type-b{
-        min-width: 280px;
+        min-width: 250px;
         width:100%;
         max-width: auto;
-        min-height: 280px;
+        min-height: 240px;
         max-height: 20vh;
     }
 
@@ -833,6 +833,10 @@ html::-webkit-scrollbar, .results-steps::-webkit-scrollbar {
 .type-b::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover
 , .results-steps::-webkit-scrollbar-thumb:hover {
     background: var(--text-box-background-color);
+}
+
+.results-steps::-webkit-scrollbar {
+    display: none;
 }
 
 
