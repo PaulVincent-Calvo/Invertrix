@@ -287,7 +287,6 @@ input:checked + .slider:before {
     overflow: hidden;
 }
 
-
 /*header*/
 .results-header{
     border-top: 3px solid var(--text-box-background-color);
@@ -295,16 +294,20 @@ input:checked + .slider:before {
     display: flex;
     min-height: 10%;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .previous-button, .next-button{
+    display: flex;
     background-color: transparent;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 20px;
     border-color: transparent;
     transition: transform 0.1s ease-in-out;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
 .results-header-steps{
@@ -314,6 +317,7 @@ input:checked + .slider:before {
     font-size: var(--message-font-size);
     color: var(--text-color);  
     justify-content: center;     
+    flex-grow: 1;
 }
 
 /*steps*/
