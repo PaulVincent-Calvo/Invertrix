@@ -9,13 +9,20 @@
 
 ## 📐 System Architecture
 **Key Components:**
-* **Frontend (Web Interface):** Built with HTML, CSS, and JavaScript to allow users to input messages and view encryption or decryption results.
-* **Backend (Flask API):** Handles matrix operations, encryption, and decryption logic using Python. 
+* **Frontend (Web Interface):**
+   * Built with HTML, CSS, and JavaScript to
+   * Allow users to input messages, click buttons and view encryption or decryption results.
+
+* **Backend (Flask API):**
+   * Flask, a Python framework, acts as the API that handles user requests.
+   * Handles matrix operations, encryption, and decryption logic using Python.
  
 **Component Interactions:**
-* Users input a message into the Frontend.
-* The Backend processes the request using Python libraries (e.g., NumPy) to perform matrix-based transformations.
-* Results are returned as JSON responses, which the Frontend displays dynamically.
+* Users input a message and keymatrix into the Frontend.
+* The Frontend sends the message and keymatrix to the Backend via API calls (Flask).
+* The Backend processes the message using Python (with NumPy) to perform matrix-based transformations like encryption or decryption.
+* The Backend returns the processed results as JSON.
+* The Frontend dynamically displays the results to the user.
 
 
 ## 🔒 Formula: Inverse Matrices to Encrypt and Decrypt Messages
@@ -103,6 +110,8 @@ The Flask app will be served locally, and you should see it running in your brow
 
 ## 🌷 Acknowledgments
 * [Ma'am Fatima](https://github.com/marieemoiselle) - Web Systems Prof
+* **Sounds Used:**
+  *
 
 ## 📸 Screenshots 
 <!-- Hindi need. Gusto ko lng may ganto para may mabalikan ako sa future. wow future hehehe 🤓 -->
