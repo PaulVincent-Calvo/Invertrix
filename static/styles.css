@@ -85,7 +85,7 @@ header{
 
 .text-box{
     height: 90%;    
-    width: 625px;
+    width: 95%;
     margin: 10px;        
     font-family: var(--primary-font);
     font-size: var(--message-font-size);      
@@ -275,8 +275,6 @@ input:checked + .slider:before {
     transition: transform 0.1s ease-in-out;
 }
 
-
-
 .generate-key-button:disabled {
     opacity: 50%;
     cursor: not-allowed;
@@ -293,10 +291,9 @@ input:checked + .slider:before {
     border-top: 3px solid var(--text-box-background-color);
     border-bottom: 3px solid var(--text-box-background-color);
     display: flex;
-    flex-wrap: wrap;
     min-height: 10%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .previous-button, .next-button{
@@ -310,7 +307,7 @@ input:checked + .slider:before {
 
 .results-header-steps{
     display: flex;
-    min-width: 200px;
+    min-width: 150px;
     font-family: var(--primary-font);
     font-size: var(--message-font-size);
     color: var(--text-color);  
@@ -364,13 +361,15 @@ input:checked + .slider:before {
 
 .copy-button {
     box-sizing: border-box;
+    width: var(--button-width);
     padding: 8px 12px;
     font-family: var(--primary-font);
-    font-size: var(--button-font-size, 0.9rem);
-    color: #fff;
+    font-size: var(--button-font-size);
+    color: var(--button-text-color);
     background-color: var(--button-color);
+    font-weight: 600;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     margin: 3%;
     transition: transform 0.1s ease-in-out;
@@ -444,7 +443,6 @@ input:checked + .slider:before {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s, opacity 0.3s ease-in-out;
-    
 }
 .modal.show {
     visibility: visible;
@@ -453,8 +451,7 @@ input:checked + .slider:before {
 
 
 .modal-content {    
-    width: 85%;
-    max-width: 95%;
+    width: 90%;
     max-height: fit-content;
     background-color: var(--background-color);
     padding: 10px;
@@ -661,7 +658,6 @@ p{
     :root{
         --message-font-size: 1.2em;
         --matrix-font-size: 0.8em;
-        --button-width: 150px;
     }
 
     body{
@@ -672,6 +668,13 @@ p{
         height: 3.5rem;
     }
 
+    .generate-key-button{
+        padding: 4px;
+    }
+
+    .copy-button{
+        width: 100px;
+    }
     /* Header adjustments */
     .results-header{
         display: flex;
@@ -701,20 +704,14 @@ p{
         font-size: var(--message-font-size);
     }
 
-    .text-box{
-        width: 100%;
-    }
-
     .key-matrix-container{
         min-width: 100%;
     }
 
-    
     .modal{
         width: 100vw;
         height: 100%;
     }
-
 
     .results-header-steps{
         font-size:1rem;
@@ -761,12 +758,12 @@ p{
     #copy-key-matrix-container, #product-matrix-container, #input-to-grid-matrix-container, 
 #copy-key-matrix-container-decrypt,#inverse-key-matrix-container,#input-to-grid-matrix-container-2, 
 #product-matrix-container-decrypt, #inverse-key-matrix-container-2, #indices-grid-container, #copy-grid-container{
-    margin: 10px;
-    max-height: 80%;          
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+        margin: 10px;
+        max-height: 80%;          
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
     }
 
 }
