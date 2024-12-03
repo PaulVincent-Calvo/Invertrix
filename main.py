@@ -1,27 +1,33 @@
 from flask import Flask, render_template, request, jsonify, make_response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import uuid
 import numpy as np
 import re
-import uuid
 
 app = Flask(__name__, template_folder='templates')
 
-# Assign a unique cookie if the device doesn't already have one
 @app.before_request
 def assign_cookie():
     if not request.cookies.get('device_id'):
-        response = make_response("Setting device ID")
+        response = make_response("Setting device ID. Please Reload Again")
         device_id = str(uuid.uuid4())
         response.set_cookie('device_id', device_id, max_age=3600 * 24 * 30)  # 30-day expiry
         return response
 
-# Function to retrieve the cookie for rate limiting
+
 def get_device_id():
     return request.cookies.get('device_id', "unknown-device")
 
-# Apply rate limiting using the device cookie
-limiter = Limiter(key_func=get_device_id, app=app)
+# Initialize Limiter
+limiter = Limiter(key_func=get_device_id,app=app)
+
+
+@limiter.request_filter
+def global_rate_limit():
+    return False  
+
+limiter.global_limits = ["500 requests per minute"]  
 random_numbers_limit = 10000
 
 class SecurityMethods:
@@ -179,7 +185,17 @@ def decrypt_message():
 
 @app.errorhandler(429)
 def ratelimit_error(error):
-    return jsonify(error="ratelimit exceeded", message="Too many requests"), 429
+    if "device-specific-limit-name" in str(error.description):
+        return jsonify(
+            error="ratelimit exceeded",
+            message="Too many requests from your device. Please wait a while."
+        ), 429
+    else:
+        return jsonify(
+            error="global ratelimit exceeded",
+            message="Too many requests from all users. Please try again later."
+        ), 429
+
 
 class GeneralMethods:
     alphabet = np.array([' ','a','b','c','d','e','f','g','h','i','j',
