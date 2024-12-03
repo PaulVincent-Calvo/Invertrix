@@ -42,13 +42,13 @@ function playDropdownSound() {
 // Step names for each mode
 const mode1Steps = [
     'STEP 1: Convert Message into a Matrix',
-    'STEP 2: Multiply Key Matrix to the Converted Matrix',
+    'STEP 2: Multiply Converted Matrix to the Key Matrix ',
     'RESULT: Encrypted Message'
 ];
 const mode2Steps = [
     'STEP 1: Convert Message into a Matrix',
     'STEP 2: Get the Inverse of the Key Matrix',
-    'STEP 3: Multiply Key Matrix Inverse to the Converted Matrix',
+    'STEP 3: Multiply Converted Matrix to the Key Matrix Inverse',
     'RESULT: Decrypted Message'
 ];
 
@@ -400,6 +400,8 @@ function startRandomNumberAnimation(cells) {
 
 // Previous step navigation
 function previousStep() {
+    const stepWidth = resultsStepsContainer.offsetWidth; // Use offsetWidth for accuracy
+    console.log("Scrolling to step prev", currentStepIndex, "Width:", stepWidth);
     if (currentStepIndex > 0) {
         currentStepIndex--;
         updateStepsHeader();
@@ -410,6 +412,8 @@ function previousStep() {
 // Next step navigation
 function nextStep() {
     const steps = mode === 'mode1' ? mode1Steps : mode2Steps;
+    const stepWidth = resultsStepsContainer.offsetWidth; // Use offsetWidth for accuracy
+    console.log("Scrolling to step next:", currentStepIndex, "Width:", stepWidth);
     if (currentStepIndex < steps.length - 1) {
         currentStepIndex++;
         updateStepsHeader();
@@ -427,6 +431,7 @@ function updateStepsHeader() {
 // Scrolls the results container to the current step
 function scrollToCurrentStep() {
     const stepWidth = resultsStepsContainer.offsetWidth; // Use offsetWidth for accuracy
+    console.log("Scrolling to step:", currentStepIndex, "Width:", stepWidth);
     resultsStepsContainer.scrollTo({
         left: stepWidth * currentStepIndex,
         behavior: 'smooth'
@@ -454,14 +459,15 @@ function updateStepsDisplay() {
                 <div class="step-2-container-1 type-b" id="step-2-container-1">
 
                     <div class = "space-top"></div>
-                    <div id = "copy-key-matrix-container"></div>
+                    <div id = "copy-grid-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
                 <div class="step-2-container-2 type-b" id="step-2-container-2">
 
                     <div class = "space-top"></div>
-                    <div id = "copy-grid-container"></div>
+                    
+                    <div id = "copy-key-matrix-container"></div>
                     <div class = "space-bottom"></div>
 
                 </div>
@@ -480,7 +486,6 @@ function updateStepsDisplay() {
                     <div class="copy-container">
                         <button class="copy-button" id="copy-button" onclick="copyText()">Copy</button>
                     </div>
-                    <div class = "space-bottom-result"></div>
                 </div>
             </div>`;
     } else if (mode === 'mode2') {
@@ -513,12 +518,12 @@ function updateStepsDisplay() {
             <div class="step">
                 <div class = "step-3-container-1 type-b" id = "step-3-container-1">
                     <div class = "space-top"></div>
-                    <div id = "inverse-key-matrix-container-2"></div>
+                    <div id = "input-to-grid-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
                 <div class = "step-3-container-2 type-b" id = "step-3-container-2">
                     <div class = "space-top"></div>
-                    <div id = "input-to-grid-matrix-container-2"></div>
+                    <div id = "inverse-key-matrix-container-2"></div>
                     <div class = "space-bottom"></div>
                 </div>
             </div>
@@ -535,6 +540,15 @@ function updateStepsDisplay() {
                 </div>
             </div>`;
     }
+}
+function showResultsModal() {
+    const resultsModal = document.getElementById('resultsModal');
+    const resultsStepsContainer = document.querySelector('.results-steps');
+
+    resultsStepsContainer.scrollLeft = 0;
+    console.log("Modal opened, scrollLeft reset to:", resultsStepsContainer.scrollLeft);
+
+    resultsModal.classList.add('show');
 }
 
 async function encrypt(text, gridSize) { 
@@ -568,6 +582,13 @@ async function encrypt(text, gridSize) {
         } else {
             console.log("Encryption Details:", data);
 
+            updateStepsDisplay();
+            currentStepIndex = 0; // Reset to the first step
+            updateStepsHeader();
+
+            // Show modal and reset scroll
+            showResultsModal();
+
             displayMessageAndIndices(data.message, data.indices, gridSize);
             displayMatrix(data.reshaped_indices, 'indices-grid-container');
             displayMatrix(data.reshaped_indices, 'copy-grid-container');
@@ -580,6 +601,8 @@ async function encrypt(text, gridSize) {
         console.error("Error:", error);
         showCustomAlert("An unexpected error occurred in encrypting. Please try again.");
     }
+
+    
 }
 
 function displayResult(encryptedValues) {
@@ -597,11 +620,12 @@ function displayMatrix(Matrix, container) {
     // Determine viewport width for responsive adjustments
     const viewportWidth = window.innerWidth;
 
-    let minCellWidth, minCellHeight, fontSize;
+    let minCellWidth, minCellHeight, fontSize, padding;
+    padding = '2px';
 
     if (viewportWidth <= 480) { // Mobile screens
-        minCellWidth = '2rem';
-        minCellHeight = '2rem';
+        minCellWidth = 'auto';
+        minCellHeight = 'auto';
         fontSize = '0.8rem';
     } else if (viewportWidth <= 768) { // Tablet screens
         minCellWidth = '3rem';
@@ -621,10 +645,8 @@ function displayMatrix(Matrix, container) {
         fontSize = '1.3rem';
     }
 
-    // Apply grid template for responsiveness
     gridContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(${minCellWidth}, 1fr))`;
 
-    // Create cells
     for (let row = 0; row < numRows; row++) {
         for (let col = 0; col < numCols; col++) {
             const cell = document.createElement('div');
@@ -638,11 +660,18 @@ function displayMatrix(Matrix, container) {
             cell.style.alignItems = 'center';
             cell.style.height = minCellHeight;
             cell.style.fontSize = fontSize;
+            cell.style.padding = padding;
 
             if (cell.textContent.length > 8) {
                 cell.style.minWidth = 'auto';
                 cell.style.minHeight = 'auto';
-                cell.style.fontSize = '0.8rem'; // Reduce font size for large content
+                cell.style.fontSize = '1rem'; // Reduce font size for large content
+
+                if (viewportWidth <= 480) { // Mobile screens
+                    cell.style.minWidth = 'auto';
+                    cell.style.minHeight = 'auto';
+                    cell.style.fontSize = '0.7rem';
+                }
             }
 
             // Add borders for the outer cells
@@ -676,7 +705,6 @@ function displayMessageAndIndices(message, indices, gridSize) {
 }
 
 async function decrypt(text, gridSize) {
-
     if (!text || text.trim() === "") {
         showCustomAlert("Please enter the encrypted numeric message to decrypt.");
         return false; // Indicate failure
@@ -705,6 +733,12 @@ async function decrypt(text, gridSize) {
             return false;
         } else {
             console.log("Decryption Details:", data);
+
+            updateStepsDisplay();
+            currentStepIndex = 0;
+            updateStepsHeader();
+
+            showResultsModal();
             
             displayMessage(text, 'encrypted-message-container');
             displayMatrix(data.reshaped_values_array, 'input-to-grid-matrix-container');
@@ -752,19 +786,44 @@ document.getElementById('encrypt-decrypt-button').addEventListener('click', asyn
 });
 
 function copyText() {
+    playDropdownSound();
     const textarea = document.getElementById('output-textarea');
-    textarea.select(); 
-    textarea.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(textarea.value)
+
+    // Select the text content
+    textarea.select();
+    textarea.setSelectionRange(0, 99999);  // For mobile devices
+
+    // Attempt to use the Clipboard API (modern approach)
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textarea.value)
+            .then(() => {
+                console.log('Text copied to clipboard');
+                // Optionally, show a success notification or animation
+            })
+            .catch(err => {
+                console.error('Clipboard write failed', err);
+            });
+    } else {
+        // Fallback for browsers that don't support Clipboard API
+        document.execCommand('copy');
+        console.log('Text copied to clipboard using execCommand');
+    }
 }
 
 
+function closeResultsModal() {
+    const resultsModal = document.getElementById('resultsModal');
+    resultsModal.classList.remove('show');
+    console.log("Modal closed");
+}
 
 window.addEventListener('click', (event) => {
+    const resultsModal = document.getElementById('resultsModal');
     if (event.target == resultsModal) {
-        resultsModal.style.display = 'none';
+        closeResultsModal();
     }
 });
+
 
 //START 
 let defaultGridSize = 2;
@@ -778,12 +837,6 @@ window.onload = () => {
     updateStepsDisplay();
     scrollToCurrentStep();
 
-    modeDisplay.textContent = "Mode Toggle ➜ ";
-    modeDisplay.classList.add('active');
-
-    setTimeout(() => {
-        modeDisplay.classList.remove('active');
-    }, 2000);
 };
 
 document.getElementById('previous-button').addEventListener('click', previousStep);

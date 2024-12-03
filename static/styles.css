@@ -66,7 +66,6 @@ header{
 
 /* main part - input box and key matrix box */
 .main-container{
-    max-width: 1400px;
     margin-inline: auto;
     display: flex;
     flex-wrap: wrap;
@@ -321,13 +320,15 @@ input:checked + .slider:before {
 /*steps*/
 .results-steps {
     display: flex;
-    overflow-x: hidden;
+    overflow-x: scroll;
     scroll-behavior: smooth;
     width: 100%;
 }
 
 .step{
-    display: flex;
+    display:flex;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
     margin-top: 10px;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -338,25 +339,31 @@ input:checked + .slider:before {
 }
 
 .results-text-box{
+    box-sizing: border-box; 
     flex-grow: 1;
-    max-height: 90%;      
+    max-height: 95%;      
+    width:95%; 
     font-family: var(--primary-font);
     font-size: var(--message-font-size);      
     background-color: transparent; 
     color: var(--text-color);           
     outline: none;        
     border: none;
-    overflow: auto;
     resize: none;
+    overflow-x: hidden;
+    padding: 0;  
+    margin: 0; 
 }
 
 .copy-container{
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .copy-button {
+    box-sizing: border-box;
     padding: 8px 12px;
     font-family: var(--primary-font);
     font-size: var(--button-font-size, 0.9rem);
@@ -365,6 +372,8 @@ input:checked + .slider:before {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin: 3%;
+    transition: transform 0.1s ease-in-out;
 }
 
 
@@ -373,38 +382,26 @@ input:checked + .slider:before {
     height: 10px;
 }
 
-/*container types for messages or matrices*/
-.type-a{
+.type-a, .type-b {
     display: flex;
-    min-height: 550px;
-    width: 605px;
     flex-direction: column;
-    background-color: var(--text-box-background-color);
-    border-radius: 20px;
     align-items: center;
     justify-content: flex-start;
-    max-width: 605px; 
-    max-height:550px;
-    padding: 3px; 
-    overflow: auto;
+    width: 48%; 
+    min-width: 605px; /* Prevent shrinking too small */
+    min-height: 500px; /* Set a minimum height */
+    background-color: var(--text-box-background-color); 
+    border-radius: 20px;
+    padding: 10px;
+    max-width: 550px; /* Prevent shrinking too small */
+    max-height: 500px;
     box-sizing: border-box;
+    overflow: auto;
 }
 
 .type-b{
-    display: flex;
-    min-height: 550px;
-    width: 605px;
-    flex-direction: column;
-    align-items: center;
     background-color: var(--matrix-box-background-color);
-    border-radius: 20px;
-    justify-content: flex-start;
-    max-width: 605px;
-    max-height: 550px; 
-    overflow: auto;
-    padding: 3px; 
-    box-sizing: border-box;
-}
+} 
 
 .message-and-index, p{
     font-size: var(--message-font-size);
@@ -444,11 +441,21 @@ input:checked + .slider:before {
     justify-items: center; 
     align-content: center;
     overflow-y: auto; 
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease-in-out;
+    
 }
+.modal.show {
+    visibility: visible;
+    opacity: 1;
+}
+
 
 .modal-content {    
     width: 85%;
     max-width: 95%;
+    max-height: fit-content;
     background-color: var(--background-color);
     padding: 10px;
     border-radius: 20px;
@@ -477,6 +484,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: shake 0.3s ease-in-out;
 }
 
 .custom-alert-content button {
@@ -648,83 +656,8 @@ p{
 
 
 
-/*---------------------------------------------------- Animations and scrollbar*/
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
-}
-  
-.shake {
-    animation: shake 0.2s ease-in-out;
-}
-
-@keyframes generating {
-    0% {
-        transform: scale(1);
-        opacity: 0.6;
-    }
-    50% {
-        transform: scale(1.05); 
-        opacity: 1; 
-    }
-    100% {
-        transform: scale(1); 
-        opacity: 0.6;
-    }
-}
-
-.generating {
-    animation: generating 1200ms ease-in-out infinite;
-}
-
-.mode-display {
-    font-family: var(--primary-font);
-    font-size: 1.6em; 
-    font-weight:600;
-    color: var(--text-color);
-    opacity: 0;
-    transition: opacity 1.5s ease;
-    margin-right: 10px;
-}
-
-.mode-display.active {
-    opacity: 1; 
-}
-
-.results-text-box::-webkit-scrollbar, 
-.type-a::-webkit-scrollbar, 
-.type-b::-webkit-scrollbar, 
-html::-webkit-scrollbar {
-    width: 12px;
-}
-
-.results-text-box::-webkit-scrollbar-track,
-.type-a::-webkit-scrollbar-track, 
-.type-b::-webkit-scrollbar-track,html::-webkit-scrollbar-track{
-    background: var(--text-color);
-    border-radius: 10px; 
-}
-
-.results-text-box::-webkit-scrollbar-thumb,
-.type-a::-webkit-scrollbar-thumb, 
-.type-b::-webkit-scrollbar-thumb, html::-webkit-scrollbar-thumb{
-    background: var(--background-color);
-    border-radius: 10px;
-    border: 2px solid var(--text-color);
-}
-
-.results-text-box::-webkit-scrollbar-thumb:hover,
-.type-a::-webkit-scrollbar-thumb:hover, 
-.type-b::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
-    background: var(--text-box-background-color);
-}
-
-
-@media (max-width: 700px) {
+@media (max-width:700px) {
     :root{
         --message-font-size: 1.2em;
         --matrix-font-size: 0.8em;
@@ -758,6 +691,7 @@ html::-webkit-scrollbar {
     
     .main-container{
         width: 100vw;
+        flex-wrap: wrap;
     }
 
     .message-container{
@@ -789,6 +723,7 @@ html::-webkit-scrollbar {
     
     .modal-content{
         width: 80%;
+        height: auto;
         margin: 20px;
     }
 
@@ -803,8 +738,9 @@ html::-webkit-scrollbar {
 
     .type-a,.type-b{
         min-width: 280px;
+        max-width: auto;
         min-height: 200px;
-        max-height: 200px;
+        max-height: 20vh;
     }
 
     .actual-method-container{
@@ -830,6 +766,73 @@ html::-webkit-scrollbar {
     justify-content: center;
     align-items: center;
     height: 100%;
-}
+    }
 
 }
+
+/*---------------------------------------------------- Animations and scrollbar*/
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+  
+.shake {
+    animation: shake 0.2s ease-in-out;
+}
+
+@keyframes generating {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.05); 
+        opacity: 1; 
+    }
+    100% {
+        transform: scale(1); 
+        opacity: 0.6;
+    }
+}
+
+.generating {
+    animation: generating 1200ms ease-in-out infinite;
+}
+
+.results-text-box::-webkit-scrollbar, 
+.type-a::-webkit-scrollbar, 
+.type-b::-webkit-scrollbar, 
+html::-webkit-scrollbar, .results-steps::-webkit-scrollbar {
+    width: 12px;
+}
+
+.results-text-box::-webkit-scrollbar-track,
+.type-a::-webkit-scrollbar-track, 
+.type-b::-webkit-scrollbar-track,html::-webkit-scrollbar-track
+, .results-steps::-webkit-scrollbar-track{
+    background: var(--background-color);
+    border-radius: 10px; 
+}
+
+.results-text-box::-webkit-scrollbar-thumb,
+.type-a::-webkit-scrollbar-thumb, 
+.type-b::-webkit-scrollbar-thumb, html::-webkit-scrollbar-thumb
+, .results-steps::-webkit-scrollbar-thumb{
+    background: var(--background-color);
+    border-radius: 10px;
+    border: 2px solid var(--text-color);
+}
+
+.results-text-box::-webkit-scrollbar-thumb:hover,
+.type-a::-webkit-scrollbar-thumb:hover, 
+.type-b::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover
+, .results-steps::-webkit-scrollbar-thumb:hover {
+    background: var(--text-box-background-color);
+}
+
+
+
