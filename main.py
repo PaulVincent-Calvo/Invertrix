@@ -27,7 +27,7 @@ limiter = Limiter(key_func=get_device_id,app=app)
 def global_rate_limit():
     return False  
 
-limiter.global_limits = ["500 requests per minute"]  
+limiter.global_limits = ["50 requests per minute"]  
 random_numbers_limit = 10000
 
 class SecurityMethods:
