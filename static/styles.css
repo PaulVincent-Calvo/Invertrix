@@ -738,8 +738,9 @@ p{
 
     .type-a,.type-b{
         min-width: 280px;
+        width:100%;
         max-width: auto;
-        min-height: 200px;
+        min-height: 280px;
         max-height: 20vh;
     }
 
