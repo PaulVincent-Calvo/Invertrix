@@ -1,29 +1,30 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import numpy as np
 import re
+import uuid
 
 app = Flask(__name__, template_folder='templates')
 
-# Custom function to get the real client IP
-def get_client_ip():
-    # Try to get the IP address from the 'X-Forwarded-For' header
-    forwarded_for = request.headers.get('X-Forwarded-For')
-    if forwarded_for:
-        # In case of multiple proxies, it will be a comma-separated list. We take the first IP.
-        ip = forwarded_for.split(',')[0]
-    else:
-        # Fallback to the remote address when there is no proxy
-        ip = request.remote_addr
-    return ip
+# Assign a unique cookie if the device doesn't already have one
+@app.before_request
+def assign_cookie():
+    if not request.cookies.get('device_id'):
+        response = make_response("Setting device ID")
+        device_id = str(uuid.uuid4())
+        response.set_cookie('device_id', device_id, max_age=3600 * 24 * 30)  # 30-day expiry
+        return response
 
-# Update the limiter to use the custom get_client_ip function
-limiter = Limiter(get_client_ip, app=app)
+# Function to retrieve the cookie for rate limiting
+def get_device_id():
+    return request.cookies.get('device_id', "unknown-device")
+
+# Apply rate limiting using the device cookie
+limiter = Limiter(key_func=get_device_id, app=app)
 random_numbers_limit = 10000
 
 class SecurityMethods:
-
     @staticmethod
     def validate_grid_size(size):
         """Validate if the grid size is 2, 3, 4, or 5."""
@@ -70,6 +71,9 @@ def index():
 @app.route('/generate-key', methods=['POST'])
 @limiter.limit("20 per minute") # 5 requests per minute per IP address
 def generate_key():
+    
+    device_id = get_device_id()
+    print(device_id)
 
     data = request.get_json()
     size = data.get('size', 2)
