@@ -1,5 +1,5 @@
 <p align="center"><img src="https://github.com/PaulVincent-Calvo/Invertrix/blob/main/static/assets/invertrix-favicon.png" alt="Invertrix Logo"></p>
-<h3 align="center">⚠️ Status: Under Development ⚠️</h3>
+<!-- <h3 align="center">⚠️ Status: Under Development ⚠️</h3> -->
 <h1 align="center">Invertrix: Visual Inverse Matrix Cipher</h1>
 <p align="center">by <strong>We Bare Bears</strong> 🐻🐼🐻‍❄️</p>
 
