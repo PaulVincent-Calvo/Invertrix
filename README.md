@@ -3,7 +3,6 @@
 <h1 align="center">Invertrix: Visual Inverse Matrix Cipher</h1>
 <p align="center">by <strong>We Bare Bears</strong> 🐻🐼🐻‍❄️</p>
 
-
 ## ⭐ Project Overview
 **Invertrix** is a Python-based web app encryption tool that encrypts messages using **matrix-based cipher**.  It shows each step of the encryption and decryption process, making it easier for users to understand the mathematical operations involved in matrix-based cryptography. Key features include dynamic key generation, detailed encryption and decryption steps, input validation, and rate-limiting to ensure security and functionality.
 
@@ -110,17 +109,33 @@ The Flask app will be served locally, and you should see it running in your brow
 
 ## 🌷 Acknowledgments
 * [Ma'am Fatima](https://github.com/marieemoiselle) - Web Systems Prof
-* **Sounds Used:**
-  *
+* [YayMath](https://www.youtube.com/watch?v=vrxzWNTtF68&t=1s) for the video on "Algebra 2 - Inverse Matrices to Encrypt and Decrypt Messages."
+  
+## ©️ Attributions
 
-## 📸 Screenshots 
+- [Github icons](https://www.flaticon.com/free-icons/github) created by [Pixel perfect - Flaticon](https://www.flaticon.com)  
+- [CupboardDoorLatchClick1.wav](https://freesound.org/people/chewiesmissus/sounds/213387/) by [chewiesmissus](https://freesound.org/people/chewiesmissus/) | License: [Creative Commons 0](http://creativecommons.org/publicdomain/zero/1.0/)  
+- [UI_Correct_button11.wav](https://freesound.org/people/ZenithInfinitiveStudios/sounds/342997/) by [ZenithInfinitiveStudios](https://freesound.org/people/ZenithInfinitiveStudios/) | License: [Creative Commons 0](http://creativecommons.org/publicdomain/zero/1.0/)  
+- [ui sound 17.wav](https://freesound.org/people/nezuai/sounds/577026/) by [nezuai](https://freesound.org/people/nezuai/) | License: [Attribution 4.0](https://creativecommons.org/licenses/by/4.0/)  
+- [Error #5](https://freesound.org/people/Universfield/sounds/730120/) by [Universfield](https://freesound.org/people/Universfield/) | License: [Attribution 4.0](https://creativecommons.org/licenses/by/4.0/)  
+- [AI Technology.wav](https://freesound.org/people/MATRIXXX_/sounds/705952/) by [MATRIXXX_](https://freesound.org/people/MATRIXXX_/) | License: [Creative Commons 0](http://creativecommons.org/publicdomain/zero/1.0/)  
+
+
+## 📸 Recording
 <!-- Hindi need. Gusto ko lng may ganto para may mabalikan ako sa future. wow future hehehe 🤓 -->
+https://github.com/user-attachments/assets/e998f866-abeb-45e9-a83f-53eac607b8c9
 
 ## 🔧 Built With
 * Frontend: HTML, CSS, JavaScript
 * Backend Logic:  Python + Numpy Library
 * API: Flask
+  
 ---
 <p align="center"><img src="https://github.com/PaulVincent-Calvo/Invertrix/blob/main/static/assets/invertix-logo.png" alt="Invertrix Logo"></p>
 
 ---
+<p align="center">
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.demolab.com?font=&weight=500&size=17&duration=2000&pause=1000&color=0DA323&center=true&vCenter=true&width=435&lines=12+/+04+/+2024" alt="Typing SVG">
+  </a>
+</p>
