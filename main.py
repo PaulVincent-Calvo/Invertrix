@@ -1,17 +1,17 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, redirect, url_for
 from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 import uuid
 import numpy as np
 import re
 
 app = Flask(__name__, template_folder='templates')
 
+# Assign a unique cookie if the device doesn't already have one
 @app.before_request
 def assign_cookie():
     if not request.cookies.get('device_id'):
-        response = make_response("Setting device ID. Please Reload Again")
         device_id = str(uuid.uuid4())
+        response = make_response(redirect(request.url))
         response.set_cookie('device_id', device_id, max_age=3600 * 24 * 30)  # 30-day expiry
         return response
 
@@ -19,15 +19,17 @@ def assign_cookie():
 def get_device_id():
     return request.cookies.get('device_id', "unknown-device")
 
-# Initialize Limiter
-limiter = Limiter(key_func=get_device_id,app=app)
+# Initialize the Limiter
+limiter = Limiter(key_func=get_device_id, app=app)
 
+# Apply device-specific rate limit (20 requests per minute per device)
+limiter.limit("20 per minute", key_func=get_device_id)(lambda: None)
 
-@limiter.request_filter
+# Apply global rate limit (10 requests per minute for the entire server)
+@limiter.limit("10 per minute", key_func=lambda: '*')  # Global limit for all devices
 def global_rate_limit():
-    return False  
+    pass
 
-limiter.global_limits = ["50 requests per minute"]  
 random_numbers_limit = 10000
 
 class SecurityMethods:
@@ -75,13 +77,13 @@ def index():
     return render_template('invertrix.html')
 
 @app.route('/generate-key', methods=['POST'])
-@limiter.limit("20 per minute") # 5 requests per minute per IP address
+@limiter.limit("20 per minute", key_func=get_device_id) 
 def generate_key():
     
     device_id = get_device_id()
     print(device_id)
 
-    data = request.get_json()
+    data = request.get_json() # recieve data from frontend 
     size = data.get('size', 2)
     
     if not security_methods.validate_grid_size(size):
@@ -94,10 +96,10 @@ def generate_key():
     return jsonify(key_matrix)
 
 @app.route('/encrypt', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("10 per minute", key_func=get_device_id)
 def encrypt_message():
 
-    data = request.get_json()
+    data = request.get_json() # recieve data from frontend 
     message = data.get('message')
     keyMatrix = data.get('keyMatrix')
     gridSize = data.get('gridSize')
@@ -116,25 +118,19 @@ def encrypt_message():
     if keyMatrix.ndim != 2:
         return jsonify({"error": "Input/Generate the key matrix"}), 400
     
-    
+    #Processes
     keyMatrixSize = keyMatrix.shape[0]
-    
-    # Initialize GeneralMethods and Encryptor classes
     general_methods = GeneralMethods()
     encryptor = Encryptor(keyMatrix, general_methods)
-    
-    # Calculate message matrix size and pad message
     messageMatrixSize = general_methods.calculateMessageMatrixSize(message, keyMatrixSize)
     paddedMessage = general_methods.padMessageToMatrixSize(message, messageMatrixSize)
-    
-    # Perform encryption and gather details
     encryption_details = encryptor.encrypt(paddedMessage, messageMatrixSize)
     
     # Return the full set of encryption details
     return jsonify(encryption_details)  # Return the dictionary directly as JSON
 
 @app.route('/decrypt', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("10 per minute", key_func=get_device_id)
 def decrypt_message():
     try:
         data = request.get_json()
@@ -185,7 +181,8 @@ def decrypt_message():
 
 @app.errorhandler(429)
 def ratelimit_error(error):
-    if "device-specific-limit-name" in str(error.description):
+    print(error.description)
+    if "20 per 1 minute" in str(error.description):
         return jsonify(
             error="ratelimit exceeded",
             message="Too many requests from your device. Please wait a while."
