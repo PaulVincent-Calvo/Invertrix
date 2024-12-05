@@ -9,7 +9,7 @@
 ## 📐 System Architecture
 **Key Components:**
 * **Frontend (Web Interface):**
-   * Built with HTML, CSS, and JavaScript to
+   * Built with HTML, CSS, and JavaScript
    * Allow users to input messages, click buttons and view encryption or decryption results.
 
 * **Backend (Flask API):**
@@ -56,7 +56,7 @@
 The development of Invertrix focused on making the web app easy to use, visually appealing, and functional. 
 
 1. **Modular Design:** The backend uses separate classes for tasks like encryption, decryption, and validation, making the code easy to maintain and understand.
-2. **User Experience Focus:** The interface was designed with simplicity in mind, ensuring users can easily interact with the web app.
+2. **User Experience Focus:** We kept the design simple, so anyone can use the app without getting confused. The look was inspired by The Matrix, with the green code and digital style adding a cool tech vibe.
 3. **Error Handling:** Real-time input validation and meaningful error messages guide users to correct issues efficiently.
 
 ## ✅ Correctness and Efficiency
@@ -108,7 +108,7 @@ The Flask app will be served locally, and you should see it running in your brow
 
 
 ## 🌷 Acknowledgments
-* [Ma'am Fatima](https://github.com/marieemoiselle) - Web Systems Prof
+* [Ma'am Fatima](https://github.com/marieemoiselle) - IT 314: Web Systems and Technologies Prof
 * [YayMath](https://www.youtube.com/watch?v=vrxzWNTtF68&t=1s) for the video on "Algebra 2 - Inverse Matrices to Encrypt and Decrypt Messages."
   
 ## ©️ Attributions
@@ -121,7 +121,7 @@ The Flask app will be served locally, and you should see it running in your brow
 - [AI Technology.wav](https://freesound.org/people/MATRIXXX_/sounds/705952/) by [MATRIXXX_](https://freesound.org/people/MATRIXXX_/) | License: [Creative Commons 0](http://creativecommons.org/publicdomain/zero/1.0/)  
 
 
-## 📸 Recording
+## 📸 Video
 <!-- Hindi need. Gusto ko lng may ganto para may mabalikan ako sa future. wow future hehehe 🤓 -->
 https://github.com/user-attachments/assets/e998f866-abeb-45e9-a83f-53eac607b8c9
 
